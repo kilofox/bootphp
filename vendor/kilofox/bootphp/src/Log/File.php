@@ -2,6 +2,9 @@
 
 namespace Bootphp\Log;
 
+use Bootphp\Exception\BootphpException;
+use Bootphp\Debug;
+
 /**
  * File log writer. Writes out messages and stores them in a YYYY/MM directory.
  *

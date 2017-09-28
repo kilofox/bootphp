@@ -52,13 +52,13 @@ if (isset($_SERVER['BOOTPHP_ENV'])) {
  * - boolean  expose      set the X-Powered-By header                        false
  */
 Bootphp\Core::init(array(
-    'base_url' => '/bootcms/',
+    'base_url' => '/bootphp/',
 ));
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
-Bootphp\Core::$log->attach(new \Bootphp\Log\File(APP_PATH . DIRECTORY_SEPARATOR . 'logs'));
+Bootphp\Core::$log->attach(new \Bootphp\Log\File(APP_PATH . DIRECTORY_SEPARATOR . 'log'));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.

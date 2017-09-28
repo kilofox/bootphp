@@ -37,7 +37,7 @@ class Internal extends Client
     public function execute_request(Request $request, Response $response)
     {
         // Create the class prefix
-        $prefix = 'App\\Controller\\';
+        $prefix = 'App\\src\\Controller\\';
 
         // Directory
         $directory = $request->directory();
