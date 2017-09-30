@@ -88,7 +88,7 @@ class Route
      */
     public static function set($name, $uri = null, $regex = null)
     {
-        return Route::$_routes[$name] = new Route($uri, $regex);
+        return self::$_routes[$name] = new Route($uri, $regex);
     }
 
     /**
@@ -102,11 +102,11 @@ class Route
      */
     public static function get($name)
     {
-        if (!isset(Route::$_routes[$name])) {
+        if (!isset(self::$_routes[$name])) {
             throw new BootphpException('The requested route does not exist: :route', array(':route' => $name));
         }
 
-        return Route::$_routes[$name];
+        return self::$_routes[$name];
     }
 
     /**
@@ -118,7 +118,7 @@ class Route
      */
     public static function all()
     {
-        return Route::$_routes;
+        return self::$_routes;
     }
 
     /**
@@ -131,7 +131,7 @@ class Route
      */
     public static function name(Route $route)
     {
-        return array_search($route, Route::$_routes);
+        return array_search($route, self::$_routes);
     }
 
     /**
@@ -156,7 +156,7 @@ class Route
         if ($save === true) {
             try {
                 // Cache all defined routes
-                Core::cache('Route::cache()', Route::$_routes);
+                Core::cache('Route::cache()', self::$_routes);
             } catch (\Exception $e) {
                 // We most likely have a lambda in a route, which cannot be cached
                 throw new BootphpException('One or more routes could not be cached (:message)', array(
@@ -167,17 +167,17 @@ class Route
             if ($routes = Core::cache('Route::cache()')) {
                 if ($append) {
                     // Append cached routes
-                    Route::$_routes += $routes;
+                    self::$_routes += $routes;
                 } else {
                     // Replace existing routes
-                    Route::$_routes = $routes;
+                    self::$_routes = $routes;
                 }
 
                 // Routes were cached
-                return Route::$cache = true;
+                return self::$cache = true;
             } else {
                 // Routes were not cached
-                return Route::$cache = false;
+                return self::$cache = false;
             }
         }
     }
@@ -195,7 +195,7 @@ class Route
      */
     public static function url($name, array $params = null, $protocol = null)
     {
-        $route = Route::get($name);
+        $route = self::get($name);
 
         // Create a URI with the route and convert it to a URL
         if ($route->is_external())
@@ -224,7 +224,7 @@ class Route
     {
         // The URI should be considered literal except for keys and optional parts
         // Escape everything preg_quote would escape except for : ( ) < >
-        $expression = preg_replace('#' . Route::REGEX_ESCAPE . '#', '\\\\$0', $uri);
+        $expression = preg_replace('#' . self::REGEX_ESCAPE . '#', '\\\\$0', $uri);
 
         if (strpos($expression, '(') !== false) {
             // Make optional parts of the URI non-capturing and optional
@@ -232,12 +232,12 @@ class Route
         }
 
         // Insert default regex for keys
-        $expression = str_replace(array('<', '>'), array('(?P<', '>' . Route::REGEX_SEGMENT . ')'), $expression);
+        $expression = str_replace(array('<', '>'), array('(?P<', '>' . self::REGEX_SEGMENT . ')'), $expression);
 
         if ($regex) {
             $search = $replace = [];
             foreach ($regex as $key => $value) {
-                $search[] = "<$key>" . Route::REGEX_SEGMENT;
+                $search[] = "<$key>" . self::REGEX_SEGMENT;
                 $replace[] = "<$key>$value";
             }
 
@@ -304,7 +304,7 @@ class Route
         }
 
         // Store the compiled regex locally
-        $this->_route_regex = Route::compile($uri, $regex);
+        $this->_route_regex = self::compile($uri, $regex);
     }
 
     /**
@@ -452,7 +452,7 @@ class Route
      */
     public function is_external()
     {
-        return !in_array(Arr::get($this->_defaults, 'host', false), Route::$localhosts);
+        return !in_array(Arr::get($this->_defaults, 'host', false), self::$localhosts);
     }
 
     /**
@@ -493,7 +493,7 @@ class Route
         $compile = function ($portion, $required) use (&$compile, $defaults, $params) {
             $missing = [];
 
-            $pattern = '#(?:' . Route::REGEX_KEY . '|' . Route::REGEX_GROUP . ')#';
+            $pattern = '#(?:' . self::REGEX_KEY . '|' . self::REGEX_GROUP . ')#';
             $result = preg_replace_callback($pattern, function ($matches) use (&$compile, $defaults, &$missing, $params, &$required) {
                 if ($matches[0][0] === '<') {
                     // Parameter, unwrapped
@@ -552,7 +552,7 @@ class Route
 
             if (strpos($host, '://') === false) {
                 // Use the default defined protocol
-                $host = Route::$default_protocol . $host;
+                $host = self::$default_protocol . $host;
             }
 
             // Clean up the host and prepend it to the URI

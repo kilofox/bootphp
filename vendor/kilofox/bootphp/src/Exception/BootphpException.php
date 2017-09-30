@@ -191,12 +191,13 @@ class BootphpException extends \Exception
 
             // Instantiate the error view.
             $view = \Bootphp\View::factory('error', get_defined_vars());
+            $view->set_filename(__DIR__ . '/view/error.php');
 
             // Prepare the response object.
             $response = Response::factory();
 
             // Set the response status
-            $response->status(($e instanceof HttpException) ? $e->getCode() : 500);
+            $response->status($e instanceof HttpException ? $e->getCode() : 500);
 
             // Set the response headers
             $response->headers('Content-Type', 'text/html; charset=' . Core::$charset);

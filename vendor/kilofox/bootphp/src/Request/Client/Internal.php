@@ -9,7 +9,7 @@ use Bootphp\Http\HttpException;
 use Bootphp\Exception\BootphpException;
 
 /**
- * Request Client for internal execution
+ * Request Client for internal execution.
  *
  * @author      Tinsh <kilofox2000@gmail.com>
  * @copyright   (C) 2013-2017 Kilofox Studio
@@ -37,7 +37,7 @@ class Internal extends Client
     public function execute_request(Request $request, Response $response)
     {
         // Create the class prefix
-        $prefix = 'App\\src\\Controller\\';
+        $prefix = 'App\\Controller\\';
 
         // Directory
         $directory = $request->directory();

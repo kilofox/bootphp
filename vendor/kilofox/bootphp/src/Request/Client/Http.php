@@ -1,8 +1,10 @@
 <?php
+
 namespace Bootphp\Request\Client;
 
 use Bootphp\Request\Client\External;
 use Bootphp\Exception\BootphpException;
+use Bootphp\Http\Request;
 
 /**
  * [\Bootphp\Request\Client\External] HTTP driver performs external requests using the
@@ -40,7 +42,7 @@ class Http extends External
     }
 
     /**
-     * @var     array     curl options
+     * @var     array     cUrl options
      * @link    http://www.php.net/manual/function.curl-setopt
      */
     protected $_options = [];
@@ -56,18 +58,18 @@ class Http extends External
     public function _send_message(Request $request, Response $response)
     {
         $http_method_mapping = [
-            'GET' => HTTPRequest::METH_GET,
-            'HEAD' => HTTPRequest::METH_HEAD,
-            'POST' => HTTPRequest::METH_POST,
-            'PUT' => HTTPRequest::METH_PUT,
-            'DELETE' => HTTPRequest::METH_DELETE,
-            'OPTIONS' => HTTPRequest::METH_OPTIONS,
-            'TRACE' => HTTPRequest::METH_TRACE,
-            'CONNECT' => HTTPRequest::METH_CONNECT,
+            'GET' => 'GET',
+            'HEAD' => 'HEAD',
+            'POST' => 'POST',
+            'PUT' => 'PUT',
+            'DELETE' => 'DELETE',
+            'OPTIONS' => 'OPTIONS',
+            'TRACE' => 'TRACE',
+            'CONNECT' => 'CONNECT',
         ];
 
         // Create an http request object
-        $http_request = new HTTPRequest($request->uri(), $http_method_mapping[$request->method()]);
+        $http_request = new \Request($request->uri(), $http_method_mapping[$request->method()]);
 
         if ($this->_options) {
             // Set custom options
@@ -92,11 +94,7 @@ class Http extends External
 
         try {
             $http_request->send();
-        } catch (HTTPRequestException $e) {
-            throw new BootphpException($e->getMessage());
-        } catch (HTTPMalformedHeaderException $e) {
-            throw new BootphpException($e->getMessage());
-        } catch (HTTPEncodingException $e) {
+        } catch (\Exception $e) {
             throw new BootphpException($e->getMessage());
         }
 

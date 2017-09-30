@@ -15,6 +15,12 @@ use Bootphp\Exception\BootphpException;
  */
 class View
 {
+    /**
+     * Template map.
+     *
+     * @var array
+     */
+    protected $map = [];
     // Array of global variables
     protected static $_global_data = [];
 
@@ -24,13 +30,13 @@ class View
      *
      *     $view = View::factory($file);
      *
-     * @param   string  $file   view filename
-     * @param   array   $data   array of values
+     * @param   string  $file   View filename
+     * @param   array   $data   Array of values
      * @return  View
      */
     public static function factory($file = null, array $data = null)
     {
-        return new View($file, $data);
+        return new self($file, $data);
     }
 
     /**
@@ -50,9 +56,9 @@ class View
         // Import the view variables to local namespace
         extract($bootphp_view_data, EXTR_SKIP);
 
-        if (View::$_global_data) {
+        if (self::$_global_data) {
             // Import the global view variables to local namespace
-            extract(View::$_global_data, EXTR_SKIP | EXTR_REFS);
+            extract(self::$_global_data, EXTR_SKIP | EXTR_REFS);
         }
 
         // Capture the view output
@@ -95,10 +101,10 @@ class View
     {
         if (is_array($key) or $key instanceof Traversable) {
             foreach ($key as $name => $value) {
-                View::$_global_data[$name] = $value;
+                self::$_global_data[$name] = $value;
             }
         } else {
-            View::$_global_data[$key] = $value;
+            self::$_global_data[$key] = $value;
         }
     }
 
@@ -114,7 +120,7 @@ class View
      */
     public static function bind_global($key, & $value)
     {
-        View::$_global_data[$key] = & $value;
+        self::$_global_data[$key] = & $value;
     }
 
     // View filename
@@ -160,8 +166,8 @@ class View
     {
         if (array_key_exists($key, $this->_data)) {
             return $this->_data[$key];
-        } elseif (array_key_exists($key, View::$_global_data)) {
-            return View::$_global_data[$key];
+        } elseif (array_key_exists($key, self::$_global_data)) {
+            return self::$_global_data[$key];
         } else {
             throw new BootphpException('View variable is not set: :var', array(':var' => $key));
         }
@@ -193,7 +199,7 @@ class View
      */
     public function __isset($key)
     {
-        return (isset($this->_data[$key]) or isset(View::$_global_data[$key]));
+        return (isset($this->_data[$key]) or isset(self::$_global_data[$key]));
     }
 
     /**
@@ -206,7 +212,7 @@ class View
      */
     public function __unset($key)
     {
-        unset($this->_data[$key], View::$_global_data[$key]);
+        unset($this->_data[$key], self::$_global_data[$key]);
     }
 
     /**
@@ -237,13 +243,13 @@ class View
      *
      *     $view->set_filename($file);
      *
-     * @param   string  $file   view filename
+     * @param   string  $file   View filename
      * @return  View
      * @throws  BootphpException
      */
     public function set_filename($file)
     {
-        $path = Core::find_file('views', $file);
+        $path = $file;
         if ($path === false) {
             throw new BootphpException('The requested view :file could not be found', array(
             ':file' => $file,
@@ -289,26 +295,6 @@ class View
     }
 
     /**
-     * Assigns a value by reference. The benefit of binding is that values can
-     * be altered without re-setting them. It is also possible to bind variables
-     * before they have values. Assigned values will be available as a
-     * variable within the view file:
-     *
-     *     // This reference can be accessed as $ref within the view
-     *     $view->bind('ref', $bar);
-     *
-     * @param   string  $key    variable name
-     * @param   mixed   $value  referenced variable
-     * @return  $this
-     */
-    public function bind($key, & $value)
-    {
-        $this->_data[$key] = & $value;
-
-        return $this;
-    }
-
-    /**
      * Renders the view object to a string. Global and local data are merged
      * and extracted to create local variables within the view file.
      *
@@ -333,7 +319,7 @@ class View
         }
 
         // Combine local and global data and capture the output
-        return View::capture($this->_file, $this->_data);
+        return self::capture($this->_file, $this->_data);
     }
 
 }

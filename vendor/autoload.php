@@ -10,10 +10,9 @@
 class AutoloaderInit
 {
     private static $loader;
-
     private static $map = [
-        'Bootphp\\' => array(SYS_PATH),
-        'App\\' => array(APP_PATH),
+        'Bootphp\\' => array(__DIR__ . '/kilofox/bootphp/src'),
+        'App\\' => array(__DIR__ . '/../app/src'),
     ];
 
     public static function loadClassLoader($class)

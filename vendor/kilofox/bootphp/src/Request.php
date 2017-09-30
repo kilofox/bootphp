@@ -64,7 +64,7 @@ class Request implements Http\Request
     public static function factory($uri = true, $client_params = [], $allow_external = true, $injected_routes = [])
     {
         // If this is the initial request
-        if (!Request::$initial) {
+        if (!self::$initial) {
             $protocol = HTTP::$protocol;
 
             if (isset($_SERVER['REQUEST_METHOD'])) {
@@ -78,7 +78,7 @@ class Request implements Http\Request
             if ((!empty($_SERVER['HTTPS']) and filter_var($_SERVER['HTTPS'], FILTER_VALIDATE_BOOLEAN))
                 or ( isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
                 and $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
-                and in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies)) {
+                and in_array($_SERVER['REMOTE_ADDR'], self::$trusted_proxies)) {
                 // This request is secure
                 $secure = true;
             }
@@ -90,7 +90,7 @@ class Request implements Http\Request
 
             if (isset($_SERVER['HTTP_USER_AGENT'])) {
                 // Browser type
-                Request::$user_agent = $_SERVER['HTTP_USER_AGENT'];
+                self::$user_agent = $_SERVER['HTTP_USER_AGENT'];
             }
 
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
@@ -100,28 +100,28 @@ class Request implements Http\Request
 
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
                 and isset($_SERVER['REMOTE_ADDR'])
-                and in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies)) {
+                and in_array($_SERVER['REMOTE_ADDR'], self::$trusted_proxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 // Format: "X-Forwarded-For: client1, proxy1, proxy2"
                 $client_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-                Request::$client_ip = array_shift($client_ips);
+                self::$client_ip = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['HTTP_CLIENT_IP'])
                 and isset($_SERVER['REMOTE_ADDR'])
-                and in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies)) {
+                and in_array($_SERVER['REMOTE_ADDR'], self::$trusted_proxies)) {
                 // Use the forwarded IP address, typically set when the
                 // client is using a proxy server.
                 $client_ips = explode(',', $_SERVER['HTTP_CLIENT_IP']);
 
-                Request::$client_ip = array_shift($client_ips);
+                self::$client_ip = array_shift($client_ips);
 
                 unset($client_ips);
             } elseif (isset($_SERVER['REMOTE_ADDR'])) {
                 // The remote IP address
-                Request::$client_ip = $_SERVER['REMOTE_ADDR'];
+                self::$client_ip = $_SERVER['REMOTE_ADDR'];
             }
 
             if ($method !== 'GET') {
@@ -131,7 +131,7 @@ class Request implements Http\Request
 
             if ($uri === true) {
                 // Attempt to guess the proper URI
-                $uri = Request::detect_uri();
+                $uri = self::detect_uri();
             }
 
             $cookies = [];
@@ -143,7 +143,7 @@ class Request implements Http\Request
             }
 
             // Create the instance singleton
-            Request::$initial = $request = new Request($uri, $client_params, $allow_external, $injected_routes);
+            self::$initial = $request = new Request($uri, $client_params, $allow_external, $injected_routes);
 
             // Store global GET and POST data in the initial request only
             $request->protocol($protocol)
@@ -259,7 +259,7 @@ class Request implements Http\Request
      */
     public static function current()
     {
-        return Request::$current;
+        return self::$current;
     }
 
     /**
@@ -277,7 +277,7 @@ class Request implements Http\Request
      */
     public static function initial()
     {
-        return Request::$initial;
+        return self::$initial;
     }
 
     /**
@@ -290,7 +290,7 @@ class Request implements Http\Request
      */
     public static function user_agent($value)
     {
-        return Text::user_agent(Request::$user_agent, $value);
+        return Text::user_agent(self::$user_agent, $value);
     }
 
     /**
@@ -305,7 +305,7 @@ class Request implements Http\Request
     public static function post_max_size_exceeded()
     {
         // Make sure the request method is POST
-        if (Request::$initial->method() !== 'POST')
+        if (self::$initial->method() !== 'POST')
             return false;
 
         // Get the post_max_size in bytes
@@ -786,7 +786,7 @@ class Request implements Http\Request
     public function execute()
     {
         if (!$this->_external) {
-            $processed = Request::process($this, $this->_routes);
+            $processed = self::process($this, $this->_routes);
 
             if ($processed) {
                 // Store the matching route
@@ -841,7 +841,7 @@ class Request implements Http\Request
      */
     public function is_initial()
     {
-        return ($this === Request::$initial);
+        return ($this === self::$initial);
     }
 
     /**

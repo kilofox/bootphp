@@ -254,7 +254,7 @@ class Core
             self::$cache_dir = realpath($settings['cache_dir']);
         } else {
             // Use the default cache directory
-            self::$cache_dir = APP_PATH . DIRECTORY_SEPARATOR . 'cache';
+            self::$cache_dir = realpath(__DIR__ . '/../../../../data/cache');
         }
 
         if (!is_writable(self::$cache_dir)) {
