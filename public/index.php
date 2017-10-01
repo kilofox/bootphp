@@ -41,9 +41,8 @@ setlocale(LC_ALL, 'en_US.utf-8');
 define('ROOT_PATH', __DIR__);
 
 // Define the absolute paths.
-define('APP_PATH', realpath(ROOT_PATH . '/app'));
-define('MOD_PATH', realpath(ROOT_PATH . '/modules'));
-define('SYS_PATH', realpath(ROOT_PATH . '/vendor/kilofox/bootphp/src'));
+define('APP_PATH', realpath(__DIR__ . '/../app'));
+define('VEN_PATH', realpath(__DIR__ . '/../vendor'));
 
 /**
  * Define the start time of the application, used for profiling.

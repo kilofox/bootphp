@@ -206,10 +206,8 @@ class Debug
     {
         if (strpos($file, APP_PATH) === 0) {
             $file = 'APP_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(APP_PATH));
-        } elseif (strpos($file, SYS_PATH) === 0) {
-            $file = 'SYS_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(SYS_PATH));
-        } elseif (strpos($file, MOD_PATH) === 0) {
-            $file = 'MOD_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(MOD_PATH));
+        } elseif (strpos($file, VEN_PATH) === 0) {
+            $file = 'VEN_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(VEN_PATH));
         } elseif (strpos($file, ROOT_PATH) === 0) {
             $file = 'ROOT_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(ROOT_PATH));
         }

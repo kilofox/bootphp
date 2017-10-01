@@ -26,7 +26,7 @@ class Core
     const TESTING = 30;
     const DEVELOPMENT = 40;
     // Security check that is added to all generated PHP files
-    const FILE_SECURITY = '<?php defined(\'SYS_PATH\') or exit(\'No direct script access.\');';
+    const FILE_SECURITY = '<?php defined(\'VEN_PATH\') or exit(\'No direct script access.\');';
     // Format of cache files: header, cache name, and data
     const FILE_CACHE = ":header \n\n// :name\n\n:data\n";
 
@@ -138,7 +138,7 @@ class Core
     /**
      * @var  array   Include paths that are used to find files
      */
-    protected static $_paths = array(APP_PATH, SYS_PATH);
+    protected static $_paths = array(APP_PATH, VEN_PATH);
 
     /**
      * @var  array   File path cache, used when caching is true in [Core::init]
@@ -342,7 +342,7 @@ class Core
 
             // Reset internal storage
             self::$_modules = self::$_files = [];
-            self::$_paths = [APP_PATH, SYS_PATH];
+            self::$_paths = [APP_PATH, VEN_PATH];
 
             // Reset file cache status
             self::$_files_changed = false;

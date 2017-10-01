@@ -191,7 +191,7 @@ class BootphpException extends \Exception
 
             // Instantiate the error view.
             $view = \Bootphp\View::factory('error', get_defined_vars());
-            $view->set_filename(__DIR__ . '/view/error.php');
+            $view->set_filename(VEN_PATH . '/kilofox/bootphp/view/exception/error.php');
 
             // Prepare the response object.
             $response = Response::factory();
@@ -200,13 +200,13 @@ class BootphpException extends \Exception
             $response->status($e instanceof HttpException ? $e->getCode() : 500);
 
             // Set the response headers
-            $response->headers('Content-Type', 'text/html; charset=' . Core::$charset);
+            $response->headers('Content-Type', 'text/html; charset=utf-8');
 
             // Set the response body
             $response->body($view->render());
         } catch (\Exception $e) {
             /**
-             * Things are going badly for us, Lets try to keep things under control by
+             * Things are going badly for us. Lets try to keep things under control by
              * generating a simpler response object.
              */
             $response = Response::factory();

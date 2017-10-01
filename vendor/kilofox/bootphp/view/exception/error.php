@@ -113,8 +113,8 @@ $errorId = uniqid('error');
                 <?php endforeach ?>
             </table>
         </div>
-        <?php foreach (array('_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER') as $var): ?>
-            <?php if (empty($GLOBALS[$var]) or ! is_array($GLOBALS[$var])) continue ?>
+        <?php foreach (['_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER'] as $var): ?>
+            <?php if (empty($GLOBALS[$var]) || !is_array($GLOBALS[$var])) continue ?>
             <h3><a href="#<?= $env_id = $errorId . 'environment' . strtolower($var) ?>" onclick="return toggle('<?= $env_id ?>')">$<?= $var ?></a></h3>
             <div id="<?= $env_id ?>" class="collapsed">
                 <table cellspacing="0">
