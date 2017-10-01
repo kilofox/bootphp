@@ -3,6 +3,7 @@
 namespace Bootphp;
 
 use Bootphp\Exception\BootphpException;
+use Bootphp\Log\Log;
 
 /**
  * Contains the most low-level helpers methods in Bootphp:

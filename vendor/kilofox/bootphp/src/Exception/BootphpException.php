@@ -5,6 +5,7 @@ namespace Bootphp\Exception;
 use Bootphp\Core;
 use Bootphp\Response;
 use Bootphp\Http\HttpException;
+use Bootphp\Log\Log;
 
 /**
  * Bootphp exception class. Translates exceptions using the [I18n] class.
@@ -128,7 +129,7 @@ class BootphpException extends \Exception
      * @param   int        $level
      * @return  void
      */
-    public static function log(\Exception $e, $level = \Bootphp\Log::EMERGENCY)
+    public static function log(\Exception $e, $level = Log::EMERGENCY)
     {
         if (is_object(Core::$log)) {
             // Create a text version of the exception

@@ -1,12 +1,15 @@
 <?php
 
-namespace Bootphp;
+namespace Bootphp\Request;
 
+use Bootphp\Http\Http;
 use Bootphp\Http\Header;
 use Bootphp\Request\Client;
 use Bootphp\Request\Client\External;
 use Bootphp\Exception\BootphpException;
 use Bootphp\Http\HttpException;
+use Bootphp\Cookie;
+use Bootphp\Route;
 
 /**
  * Request. Uses the [Route] class to determine what
@@ -16,7 +19,7 @@ use Bootphp\Http\HttpException;
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Request implements Http\Request
+class Request implements \Bootphp\Http\Request
 {
     /**
      * @var  string  client user agent
@@ -65,7 +68,7 @@ class Request implements Http\Request
     {
         // If this is the initial request
         if (!self::$initial) {
-            $protocol = HTTP::$protocol;
+            $protocol = Http::$protocol;
 
             if (isset($_SERVER['REQUEST_METHOD'])) {
                 // Use the server request method
@@ -540,7 +543,7 @@ class Request implements Http\Request
             $this->_uri = trim($uri, '/');
 
             // Apply the client
-            $this->_client = new Request\Client\Internal($client_params);
+            $this->_client = new Client\Internal($client_params);
         } else {
             // Create a route
             $this->_route = new Route($uri);
@@ -889,7 +892,7 @@ class Request implements Http\Request
 
     /**
      * Gets or sets the HTTP protocol. If there is no current protocol set,
-     * it will use the default set in HTTP::$protocol
+     * it will use the default set in Http::$protocol
      *
      * @param   string   $protocol  Protocol to set to the request
      * @return  mixed
@@ -900,7 +903,7 @@ class Request implements Http\Request
             if ($this->_protocol)
                 return $this->_protocol;
             else
-                return $this->_protocol = HTTP::$protocol;
+                return $this->_protocol = Http::$protocol;
         }
 
         // Act as a setter
@@ -953,7 +956,7 @@ class Request implements Http\Request
 
         if ($this->_header->count() === 0 and $this->is_initial()) {
             // Lazy load the request headers
-            $this->_header = HTTP::request_headers();
+            $this->_header = Http::request_headers();
         }
 
         if ($key === null) {

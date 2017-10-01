@@ -3,6 +3,8 @@
 namespace Bootphp;
 
 use Bootphp\Exception\BootphpException;
+use Bootphp\Http\Http;
+use Bootphp\Http\Header;
 
 /**
  * Response wrapper. Created as the result of any [Request] execution
@@ -13,7 +15,7 @@ use Bootphp\Exception\BootphpException;
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Response implements Http\Response
+class Response implements \Bootphp\Http\Response
 {
     /**
      * Factory method to create a new [Response]. Pass properties
@@ -117,7 +119,7 @@ class Response implements Http\Response
      */
     public function __construct(array $config = [])
     {
-        $this->_header = new Http\Header;
+        $this->_header = new Header;
 
         foreach ($config as $key => $value) {
             if (property_exists($this, $key)) {
@@ -169,7 +171,7 @@ class Response implements Http\Response
         }
 
         if ($this->_protocol === null) {
-            $this->_protocol = HTTP::$protocol;
+            $this->_protocol = Http::$protocol;
         }
 
         return $this->_protocol;

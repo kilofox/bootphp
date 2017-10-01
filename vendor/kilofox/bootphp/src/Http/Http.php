@@ -1,6 +1,6 @@
 <?php
 
-namespace Bootphp;
+namespace Bootphp\Http;
 
 use Bootphp\Http\HttpException;
 
@@ -137,7 +137,7 @@ abstract class Http
      * representation of the HTTP request.
      *
      *      // Get http headers into the request
-     *      $request->headers = HTTP::request_headers();
+     *      $request->headers = \Bootphp\Http\Http::request_headers();
      *
      * @return  HTTP_Header
      */

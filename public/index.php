@@ -41,7 +41,7 @@ setlocale(LC_ALL, 'en_US.utf-8');
 define('ROOT_PATH', __DIR__);
 
 // Define the absolute paths.
-define('APP_PATH', realpath(__DIR__ . '/../app'));
+define('APP_PATH', realpath(__DIR__ . '/../src'));
 define('VEN_PATH', realpath(__DIR__ . '/../vendor'));
 
 /**
@@ -68,7 +68,7 @@ Bootphp\I18n::lang('en-us');
 
 if (isset($_SERVER['SERVER_PROTOCOL'])) {
     // Replace the default protocol.
-    Bootphp\Http::$protocol = $_SERVER['SERVER_PROTOCOL'];
+    Bootphp\Http\Http::$protocol = $_SERVER['SERVER_PROTOCOL'];
 }
 
 /**
@@ -145,7 +145,7 @@ if (PHP_SAPI == 'cli') {
      * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
      * If no source is specified, the URI will be automatically detected.
      */
-    echo \Bootphp\Request::factory(true, [], false)
+    echo \Bootphp\Request\Request::factory(true, [], false)
         ->execute()
         ->send_headers(true)
         ->body();

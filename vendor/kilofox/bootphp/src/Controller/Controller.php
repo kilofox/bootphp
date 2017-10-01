@@ -1,7 +1,8 @@
 <?php
 
-namespace Bootphp;
+namespace Bootphp\Controller;
 
+use Bootphp\Http\Http;
 use Bootphp\Http\HttpException;
 
 /**
@@ -116,7 +117,7 @@ abstract class Controller
     /**
      * Issues a HTTP redirect.
      *
-     * Proxies to the [HTTP::redirect] method.
+     * Proxies to the [Http::redirect] method.
      *
      * @param  string  $uri   URI to redirect to
      * @param  int     $code  HTTP Status code to use for the redirect
@@ -124,7 +125,7 @@ abstract class Controller
      */
     public static function redirect($uri = '', $code = 302)
     {
-        return HTTP::redirect((string) $uri, $code);
+        return Http::redirect((string) $uri, $code);
     }
 
     /**
@@ -139,7 +140,7 @@ abstract class Controller
      */
     protected function check_cache($etag = null)
     {
-        return HTTP::check_cache($this->request, $this->response, $etag);
+        return Http::check_cache($this->request, $this->response, $etag);
     }
 
 }

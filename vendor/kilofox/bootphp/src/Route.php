@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\Request\Request;
+
 /**
  * Routes are used to determine the controller and action for a requested URI.
  * Every route generates a regular expression which is used to match a URI

@@ -1,6 +1,8 @@
 <?php
 
-namespace Bootphp;
+namespace Bootphp\Log;
+
+use Bootphp\Log\Writer;
 
 /**
  * Message logging with observer-based log writing.
@@ -69,12 +71,12 @@ class Log
      *
      *     $log->attach($writer);
      *
-     * @param   Log\Writer  $writer     instance
+     * @param   Writer  $writer     instance
      * @param   mixed       $levels     array of messages levels to write or max level to write
      * @param   integer     $min_level  min level to write IF $levels is not an array
      * @return  Log
      */
-    public function attach(Log\Writer $writer, $levels = [], $min_level = 0)
+    public function attach(Writer $writer, $levels = [], $min_level = 0)
     {
         if (!is_array($levels)) {
             $levels = range($min_level, $levels);
@@ -94,10 +96,10 @@ class Log
      *
      *     $log->detach($writer);
      *
-     * @param   Log\Writer  $writer instance
+     * @param   Writer  $writer instance
      * @return  Log
      */
-    public function detach(Log\Writer $writer)
+    public function detach(Writer $writer)
     {
         // Remove the writer
         unset($this->_writers["{$writer}"]);
