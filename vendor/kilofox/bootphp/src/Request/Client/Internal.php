@@ -37,7 +37,7 @@ class Internal extends Client
     public function execute_request(Request $request, Response $response)
     {
         // Create the class prefix
-        $prefix = 'App\\Controller\\';
+        $prefix = 'App\\';
 
         // Directory
         $directory = $request->directory();
@@ -49,6 +49,8 @@ class Internal extends Client
             // Add the directory name to the class prefix
             $prefix .= trim($directory, '/') . '\\';
         }
+
+        $prefix .= 'Controller\\';
 
         if (\Bootphp\Core::$profiling) {
             // Set the benchmark name

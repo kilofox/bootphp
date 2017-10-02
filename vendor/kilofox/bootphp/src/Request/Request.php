@@ -7,6 +7,7 @@ use Bootphp\Http\Header;
 use Bootphp\Http\HttpException;
 use Bootphp\Request\Client;
 use Bootphp\Request\Client\External;
+use Bootphp\Core;
 use Bootphp\Cookie;
 use Bootphp\Route;
 use Bootphp\BootphpException;

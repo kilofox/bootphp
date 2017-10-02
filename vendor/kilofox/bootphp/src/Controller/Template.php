@@ -2,6 +2,8 @@
 
 namespace Bootphp\Controller;
 
+use Bootphp\View;
+
 /**
  * Abstract controller class for automatic templating.
  *
@@ -9,7 +11,7 @@ namespace Bootphp\Controller;
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-abstract class TemplateController extends Bootphp\Controller
+abstract class Template extends \Bootphp\Controller\Controller
 {
     /**
      * @var  View  page template

@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Doc\Controller;
+
+use Bootphp\Controller\Template;
+use Bootphp\Route;
+
 /**
  * Bootphp user guide and api browser.
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-abstract class Bootphp_Controller_Userguide extends Controller_Template
+class IndexController extends Template
 {
     public $template = 'userguide/template';
     // Routes

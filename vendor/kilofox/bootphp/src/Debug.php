@@ -205,11 +205,11 @@ class Debug
     public static function path($file)
     {
         if (strpos($file, APP_PATH) === 0) {
-            $file = 'APP_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(APP_PATH));
+            $file = 'APP_PATH' . substr($file, strlen(APP_PATH));
         } elseif (strpos($file, VEN_PATH) === 0) {
-            $file = 'VEN_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(VEN_PATH));
+            $file = 'VEN_PATH' . substr($file, strlen(VEN_PATH));
         } elseif (strpos($file, ROOT_PATH) === 0) {
-            $file = 'ROOT_PATH' . DIRECTORY_SEPARATOR . substr($file, strlen(ROOT_PATH));
+            $file = 'ROOT_PATH' . substr($file, strlen(ROOT_PATH));
         }
 
         return $file;
