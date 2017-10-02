@@ -3,7 +3,7 @@
 namespace Bootphp\Request\Client;
 
 use Bootphp\Request\Client\External;
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 use Bootphp\Http\Request;
 
 /**

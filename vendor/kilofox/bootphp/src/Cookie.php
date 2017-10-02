@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\BootphpException;
+
 /**
  * Cookie helper.
  *

@@ -1,5 +1,10 @@
 <?php
 
+namespace Bootphp\Image\Image;
+
+use Bootphp\Image\Image;
+use Bootphp\BootphpException;
+
 /**
  * Support for image manipulation using [GD](http://php.net/GD).
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license.html
  */
-class Bootphp_Image_GD extends Image
+class GD extends Image
 {
     // Which GD functions are available?
     const IMAGEROTATE = 'imagerotate';

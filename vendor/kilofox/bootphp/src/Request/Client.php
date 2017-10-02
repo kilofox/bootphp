@@ -2,7 +2,7 @@
 
 namespace Bootphp\Request;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 use Bootphp\Request\Client;
 use Bootphp\Arr;
 use Bootphp\Response;

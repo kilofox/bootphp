@@ -1,5 +1,10 @@
 <?php
 
+namespace Bootphp\Database\Database\Query\Builder;
+
+use Bootphp\Database\Database\Query\Builder\Where;
+use Bootphp\BootphpException;
+
 /**
  * Database query builder for SELECT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Database_Query_Builder_Select extends Database_Query_Builder_Where
+class Select extends Where
 {
     // SELECT ...
     protected $_select = [];

@@ -52,7 +52,7 @@ class Form
         $attributes['action'] = $action;
 
         // Only accept the default character set
-        $attributes['accept-charset'] = Core::$charset;
+        $attributes['accept-charset'] = 'utf-8';
 
         if (!isset($attributes['method'])) {
             // Use POST method

@@ -1,5 +1,10 @@
 <?php
 
+namespace Bootphp\Database\Database;
+
+use Bootphp\Database\Database;
+use Bootphp\BootphpException;
+
 /**
  * PDO database connection.
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Database_PDO extends Database
+class PDO extends Database
 {
     // PDO uses no quoting for identifiers
     protected $_identifier = '';

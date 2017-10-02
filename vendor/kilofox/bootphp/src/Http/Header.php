@@ -774,7 +774,7 @@ class Header extends \ArrayObject
         }
 
         if (!isset($headers['content-type'])) {
-            $processed_headers[] = 'Content-Type: ' . Core::$content_type . '; charset=' . Core::$charset;
+            $processed_headers[] = 'Content-Type: ' . Core::$content_type . '; charset=utf-8';
         }
 
         if (Core::$expose and ! isset($headers['x-powered-by'])) {

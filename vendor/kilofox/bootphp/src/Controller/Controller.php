@@ -4,6 +4,8 @@ namespace Bootphp\Controller;
 
 use Bootphp\Http\Http;
 use Bootphp\Http\HttpException;
+use Bootphp\Request\Request;
+use Bootphp\Response;
 
 /**
  * Abstract controller class. Controllers should only be created using a [Request].

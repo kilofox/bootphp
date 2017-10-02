@@ -12,7 +12,7 @@ class AutoloaderInit
     private static $loader;
     private static $map = [
         'Bootphp\\' => array(__DIR__ . '/kilofox/bootphp/src'),
-        'App\\' => array(__DIR__ . '/../app/src'),
+        'App\\' => array(__DIR__ . '/../src'),
     ];
 
     public static function loadClassLoader($class)

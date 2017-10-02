@@ -1,5 +1,8 @@
 <?php
 
+namespace Bootphp\Request\Client;
+
+use Bootphp\Request\Client\External;
 use Bootphp\Exception\BootphpException;
 
 /**
@@ -11,7 +14,7 @@ use Bootphp\Exception\BootphpException;
  * @license     http://kilofox.net/bootphp/license
  * @uses       [PHP cURL](http://php.net/manual/en/book.curl.php)
  */
-class Bootphp_Request_Client_Curl extends Request_Client_External
+class Curl extends External
 {
     /**
      * Sends the HTTP message [Request] to a remote server and processes

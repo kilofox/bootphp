@@ -4,12 +4,12 @@ namespace Bootphp\Request;
 
 use Bootphp\Http\Http;
 use Bootphp\Http\Header;
+use Bootphp\Http\HttpException;
 use Bootphp\Request\Client;
 use Bootphp\Request\Client\External;
-use Bootphp\Exception\BootphpException;
-use Bootphp\Http\HttpException;
 use Bootphp\Cookie;
 use Bootphp\Route;
+use Bootphp\BootphpException;
 
 /**
  * Request. Uses the [Route] class to determine what
@@ -1051,7 +1051,7 @@ class Request implements \Bootphp\Http\Request
         } else {
             $body = http_build_query($post, null, '&');
             $this->body($body)
-                ->headers('content-type', 'application/x-www-form-urlencoded; charset=' . Core::$charset);
+                ->headers('content-type', 'application/x-www-form-urlencoded; charset=utf-8');
         }
 
         // Set the content length

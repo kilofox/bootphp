@@ -1384,7 +1384,7 @@ class Bootphp_HTTP_HeaderTest extends Unittest_TestCase
      */
     public function provider_send_headers()
     {
-        $content_type = Core::$content_type . '; charset=' . Core::$charset;
+        $content_type = Core::$content_type . '; charset=utf-8';
 
         return array(
             array(

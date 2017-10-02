@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Database\Database\Query\Builder;
+
+use Bootphp\BootphpException;
+
 /**
  * Database query builder for INSERT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *

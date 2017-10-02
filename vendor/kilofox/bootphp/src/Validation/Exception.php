@@ -1,11 +1,15 @@
 <?php
 
+namespace Bootphp\Validation;
+
+use Bootphp\BootphpException;
+
 /**
  * @author      Tinsh <kilofox2000@gmail.com>
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Validation_Exception extends BootphpException
+class ValidationException extends BootphpException
 {
     /**
      * @var  object  Validation instance

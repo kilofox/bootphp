@@ -1,5 +1,10 @@
 <?php
 
+namespace Bootphp\Image\Image;
+
+use Bootphp\Image\Image;
+use Bootphp\BootphpException;
+
 /**
  * Support for image manipulation using [Imagick](http://php.net/Imagick).
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license.html
  */
-class Bootphp_Image_Imagick extends Image
+class Imagick extends Image
 {
     /**
      * @var  Imagick  image magick object

@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Minion;
+
+use Bootphp\BootphpException;
+
 /**
  * Minion exception
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Minion_Exception extends BootphpException
+class MinionException extends BootphpException
 {
     /**
      * Inline exception handler, displays the error message, source of the

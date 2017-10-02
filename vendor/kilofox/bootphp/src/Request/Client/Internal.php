@@ -6,7 +6,7 @@ use Bootphp\Request\Client;
 use Bootphp\Request\Request;
 use Bootphp\Response;
 use Bootphp\Http\HttpException;
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 
 /**
  * Request Client for internal execution.

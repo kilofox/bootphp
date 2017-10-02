@@ -2,7 +2,7 @@
 
 namespace Bootphp;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 use Bootphp\Http\Http;
 use Bootphp\Http\Header;
 
@@ -537,7 +537,7 @@ class Response implements \Bootphp\Http\Response
     {
         if (!$this->_header->offsetExists('content-type')) {
             // Add the default Content-Type header if required
-            $this->_header['content-type'] = Core::$content_type . '; charset=' . Core::$charset;
+            $this->_header['content-type'] = Core::$content_type . '; charset=utf-8';
         }
 
         // Set the content length

@@ -145,7 +145,7 @@ class Bootphp_Request_Client_ExternalTest extends Unittest_TestCase
                 $json,
                 $post,
                 array(
-                    'content-type' => 'application/x-www-form-urlencoded; charset=' . Core::$charset,
+                    'content-type' => 'application/x-www-form-urlencoded; charset=utf-8',
                     'body' => http_build_query($post, null, '&')
                 )
             )

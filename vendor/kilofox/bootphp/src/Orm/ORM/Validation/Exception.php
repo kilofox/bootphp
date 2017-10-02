@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Orm\ORM\Validation;
+
+use Bootphp\BootphpException;
+
 /**
  * ORM Validation exceptions.
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_ORM_Validation_Exception extends BootphpException
+class ValidationException extends BootphpException
 {
     /**
      * Array of validation objects

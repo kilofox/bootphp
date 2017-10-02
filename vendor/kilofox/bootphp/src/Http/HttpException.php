@@ -2,7 +2,7 @@
 
 namespace Bootphp\Http;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 
 class HttpException extends BootphpException
 {

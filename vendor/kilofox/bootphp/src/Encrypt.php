@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\BootphpException;
+
 /**
  * The Encrypt library provides two-way encryption of text and binary strings
  * using the [Mcrypt](http://php.net/mcrypt) extension, which consists of three

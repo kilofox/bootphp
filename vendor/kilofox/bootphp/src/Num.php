@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\BootphpException;
+
 /**
  * Number helper class. Provides additional formatting methods that for working
  * with numbers.

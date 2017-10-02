@@ -1,6 +1,10 @@
 <?php
 
-class Bootphp_Minion_CLI
+namespace Bootphp\Minion\Minion;
+
+use Bootphp\BootphpException;
+
+class CLI
 {
     public static $wait_msg = 'Press any key to continue...';
     protected static $foreground_colors = array(

@@ -2,7 +2,7 @@
 
 namespace Bootphp;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 use Bootphp\Log\Log;
 
 /**
@@ -55,11 +55,6 @@ class Core
      * @var  string
      */
     public static $content_type = 'text/html';
-
-    /**
-     * @var  string  character set of input and output
-     */
-    public static $charset = 'utf-8';
 
     /**
      * @var  string  the name of the server Bootphp is hosted upon
@@ -207,7 +202,7 @@ class Core
 
         if (self::$errors === true) {
             // Enable Bootphp exception handling, adds stack traces and error source.
-            set_exception_handler(['Bootphp\Exception\BootphpException', 'handler']);
+            set_exception_handler(['Bootphp\BootphpException', 'handler']);
 
             // Enable Bootphp error handling, converts all PHP errors to exceptions.
             set_error_handler(['Bootphp\Core', 'error_handler']);
@@ -275,16 +270,6 @@ class Core
         if (self::$caching === true) {
             // Load the file path cache
             self::$_files = self::cache('Core::find_file()');
-        }
-
-        if (isset($settings['charset'])) {
-            // Set the system character set
-            self::$charset = strtolower($settings['charset']);
-        }
-
-        if (function_exists('mb_internal_encoding')) {
-            // Set the MB extension encoding to the same character set
-            mb_internal_encoding(self::$charset);
         }
 
         if (isset($settings['base_url'])) {

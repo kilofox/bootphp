@@ -3,6 +3,7 @@
 namespace Bootphp;
 
 use Bootphp\Config\Source;
+use Bootphp\BootphpException;
 
 /**
  * Wrapper for configuration arrays. Multiple configuration readers can be

@@ -3,6 +3,7 @@
 namespace Bootphp;
 
 use Bootphp\Request\Request;
+use Bootphp\BootphpException;
 
 /**
  * Routes are used to determine the controller and action for a requested URI.

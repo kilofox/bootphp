@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Cache\Http;
+
+use Bootphp\BootphpException;
+
 /**
  * HTTP Caching adaptor class that provides caching services to the
  * [Request_Client] class, using HTTP cache control logic as defined in

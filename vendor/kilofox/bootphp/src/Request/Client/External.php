@@ -3,7 +3,7 @@
 namespace Bootphp\Request\Client;
 
 use Bootphp\Request\Client;
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 
 /**
  * [\Bootphp\Request\Client\External] provides a wrapper for all external request
@@ -123,7 +123,7 @@ abstract class External extends Client
         // Resolve the POST fields
         if ($post = $request->post()) {
             $request->body(http_build_query($post, null, '&'))
-                ->headers('content-type', 'application/x-www-form-urlencoded; charset=' . Core::$charset);
+                ->headers('content-type', 'application/x-www-form-urlencoded; charset=utf-8');
         }
 
         $request->headers('content-length', (string) $request->content_length());

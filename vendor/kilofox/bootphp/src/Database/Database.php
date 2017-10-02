@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Database\Database\Query\Builder;
+
+use Bootphp\BootphpException;
+
 /**
  * Database connection wrapper/helper.
  *
@@ -15,7 +19,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-abstract class Bootphp_Database
+abstract class Database
 {
     // Query types
     const SELECT = 1;

@@ -51,7 +51,7 @@ $errorId = uniqid('error');
 	}
 </script>
 <div id="bootphp_error">
-    <h1><span class="type"><?= $class ?> [ <?= $code ?> ]:</span> <span class="message"><?= htmlspecialchars((string) $message, ENT_QUOTES | ENT_IGNORE, Core::$charset, true); ?></span></h1>
+    <h1><span class="type"><?= $class ?> [ <?= $code ?> ]:</span> <span class="message"><?= htmlspecialchars((string) $message, ENT_QUOTES | ENT_IGNORE, 'utf-8', true); ?></span></h1>
     <div id="<?= $errorId ?>" class="content">
         <p><span class="file"><?= Debug::path($file) ?> [ <?= $line ?> ]</span></p>
         <?= Debug::source($file, $line) ?>
@@ -120,7 +120,7 @@ $errorId = uniqid('error');
                 <table cellspacing="0">
                     <?php foreach ($GLOBALS[$var] as $key => $value): ?>
                         <tr>
-                            <td><code><?= htmlspecialchars((string) $key, ENT_QUOTES, Core::$charset, true); ?></code></td>
+                            <td><code><?= htmlspecialchars((string) $key, ENT_QUOTES, 'utf-8', true); ?></code></td>
                             <td><pre><?= Debug::dump($value) ?></pre></td>
                         </tr>
                     <?php endforeach ?>

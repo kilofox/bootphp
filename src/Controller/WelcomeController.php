@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-class WelcomeController extends \Bootphp\Controller
+use Bootphp\Controller\Controller;
+
+class WelcomeController extends Controller
 {
     public function indexAction()
     {

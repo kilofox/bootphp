@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Database\Database;
+
+use Bootphp\BootphpException;
+
 /**
  * Database result wrapper.  See [Results](/database/results) for usage and examples.
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-abstract class Bootphp_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess
+abstract class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess
 {
     // Executed SQL for this result
     protected $_query;

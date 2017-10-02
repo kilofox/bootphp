@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Pagination;
+
+use Bootphp\BootphpException;
+
 /**
  * Pagination links generator.
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license.html
  */
-class Bootphp_Pagination
+class Pagination
 {
     // Merged configuration settings
     protected $config = array(

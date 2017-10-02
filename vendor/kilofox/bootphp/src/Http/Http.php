@@ -3,6 +3,7 @@
 namespace Bootphp\Http;
 
 use Bootphp\Http\HttpException;
+use Bootphp\BootphpException;
 
 /**
  * Contains the most low-level helpers methods in Bootphp:

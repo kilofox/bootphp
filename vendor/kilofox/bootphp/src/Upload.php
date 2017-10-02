@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\BootphpException;
+
 /**
  * Upload helper class for working with uploaded files and [Validation].
  *

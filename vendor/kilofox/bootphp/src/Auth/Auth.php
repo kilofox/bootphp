@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Auth;
+
+use Bootphp\BootphpException;
+
 /**
  * User authorization library. Handles user login and logout, as well as secure
  * password hashing.
@@ -8,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-abstract class Bootphp_Auth
+abstract class Auth
 {
     // Auth instances
     protected static $_instance;

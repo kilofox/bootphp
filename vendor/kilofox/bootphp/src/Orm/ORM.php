@@ -1,5 +1,10 @@
 <?php
 
+namespace Bootphp\Orm;
+
+use Bootphp\BootphpException;
+use Bootphp\Model;
+
 /**
  * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
  * access to standard PHP calls. All table rows are represented as model objects,
@@ -13,7 +18,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_ORM extends Model implements serializable
+class ORM extends Model implements \serializable
 {
     /**
      * Stores column information for ORM models

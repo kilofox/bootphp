@@ -2,7 +2,7 @@
 
 namespace Bootphp;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 
 /**
  * Acts as an object wrapper for HTML pages with embedded PHP, called "views".

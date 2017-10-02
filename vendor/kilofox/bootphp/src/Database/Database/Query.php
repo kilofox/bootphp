@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Database\Database;
+
+use Bootphp\BootphpException;
+
 /**
  * Database query wrapper.  See [Parameterized Statements](database/query/parameterized) for usage and examples.
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Database_Query
+class Query
 {
     // Query type
     protected $_type;

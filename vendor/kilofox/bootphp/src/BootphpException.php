@@ -1,6 +1,6 @@
 <?php
 
-namespace Bootphp\Exception;
+namespace Bootphp;
 
 use Bootphp\Core;
 use Bootphp\Response;
@@ -34,7 +34,7 @@ class BootphpException extends \Exception
     /**
      * Creates a new translated exception.
      *
-     *     throw new \Bootphp\Exception\BootphpException('Something went wrong, :user', array(':user' => $user));
+     *     throw new \Bootphp\BootphpException('Something went wrong, :user', array(':user' => $user));
      *
      * @param   string          $message    error message
      * @param   array           $variables  translation variables
@@ -113,7 +113,7 @@ class BootphpException extends \Exception
             ob_get_level() and ob_clean();
 
             // Set the Status code to 500, and Content-Type to text/plain.
-            header('Content-Type: text/plain; charset=' . Core::$charset, true, 500);
+            header('Content-Type: text/plain; charset=utf-8', true, 500);
 
             echo self::text($e);
 

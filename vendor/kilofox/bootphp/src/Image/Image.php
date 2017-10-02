@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Image;
+
+use Bootphp\BootphpException;
+
 /**
  * Image manipulation support. Allows images to be resized, cropped, etc.
  *
@@ -7,7 +11,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license.html
  */
-abstract class Bootphp_Image
+abstract class Image
 {
     // Resizing constraints
     const NONE = 0x01;

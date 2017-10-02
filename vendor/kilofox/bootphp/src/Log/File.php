@@ -2,7 +2,7 @@
 
 namespace Bootphp\Log;
 
-use Bootphp\Exception\BootphpException;
+use Bootphp\BootphpException;
 use Bootphp\Debug;
 
 /**

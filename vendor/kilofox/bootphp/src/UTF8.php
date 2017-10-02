@@ -42,7 +42,7 @@ class UTF8
      *     UTF8::clean($_GET); // Clean GET data
      *
      * @param   mixed   $var        variable to clean
-     * @param   string  $charset    character set, defaults to Core::$charset
+     * @param   string  $charset    character set, defaults to utf-8
      * @return  mixed
      * @uses    UTF8::clean
      * @uses    UTF8::strip_ascii_ctrl
@@ -52,7 +52,7 @@ class UTF8
     {
         if (!$charset) {
             // Use the application character set
-            $charset = Core::$charset;
+            $charset = 'utf-8';
         }
 
         if (is_array($var) or is_object($var)) {
@@ -157,12 +157,11 @@ class UTF8
      * @param   string  $str    string being measured for length
      * @return  integer
      * @uses    UTF8::$server_utf8
-     * @uses    Core::$charset
      */
     public static function strlen($str)
     {
         if (UTF8::$server_utf8)
-            return mb_strlen($str, Core::$charset);
+            return mb_strlen($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
@@ -187,12 +186,11 @@ class UTF8
      * @return  integer position of needle
      * @return  boolean false if the needle is not found
      * @uses    UTF8::$server_utf8
-     * @uses    Core::$charset
      */
     public static function strpos($str, $search, $offset = 0)
     {
         if (UTF8::$server_utf8)
-            return mb_strpos($str, $search, $offset, Core::$charset);
+            return mb_strpos($str, $search, $offset, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
@@ -221,7 +219,7 @@ class UTF8
     public static function strrpos($str, $search, $offset = 0)
     {
         if (UTF8::$server_utf8)
-            return mb_strrpos($str, $search, $offset, Core::$charset);
+            return mb_strrpos($str, $search, $offset, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
@@ -245,12 +243,11 @@ class UTF8
      * @param   integer $length length limit
      * @return  string
      * @uses    UTF8::$server_utf8
-     * @uses    Core::$charset
      */
     public static function substr($str, $offset, $length = null)
     {
         if (UTF8::$server_utf8)
-            return ($length === null) ? mb_substr($str, $offset, mb_strlen($str), Core::$charset) : mb_substr($str, $offset, $length, Core::$charset);
+            return ($length === null) ? mb_substr($str, $offset, mb_strlen($str), 'utf-8') : mb_substr($str, $offset, $length, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
@@ -296,12 +293,11 @@ class UTF8
      * @param   string  $str mixed case string
      * @return  string
      * @uses    UTF8::$server_utf8
-     * @uses    Core::$charset
      */
     public static function strtolower($str)
     {
         if (UTF8::$server_utf8)
-            return mb_strtolower($str, Core::$charset);
+            return mb_strtolower($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
@@ -321,12 +317,11 @@ class UTF8
      * @param   string  $str mixed case string
      * @return  string
      * @uses    UTF8::$server_utf8
-     * @uses    Core::$charset
      */
     public static function strtoupper($str)
     {
         if (UTF8::$server_utf8)
-            return mb_strtoupper($str, Core::$charset);
+            return mb_strtoupper($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
             require Core::find_file('utf8', __FUNCTION__);
