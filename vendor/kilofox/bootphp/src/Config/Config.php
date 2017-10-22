@@ -1,9 +1,10 @@
 <?php
 
-namespace Bootphp;
+namespace Bootphp\Config;
 
 use Bootphp\Config\Source;
 use Bootphp\BootphpException;
+use Bootphp\Arr;
 
 /**
  * Wrapper for configuration arrays. Multiple configuration readers can be
@@ -79,10 +80,10 @@ class Config
      *
      *     $array = $config->load($name);
      *
-     * See [Bootphp_Config_Group] for more info
+     * See [Bootphp\Config\Group] for more info.
      *
-     * @param   string  $group  configuration group name
-     * @return  Bootphp_Config_Group
+     * @param   string  $group  Configuration group name
+     * @return  Bootphp\Config\Group
      * @throws  BootphpException
      */
     public function load($group)
@@ -92,22 +93,14 @@ class Config
         }
 
         if (empty($group)) {
-            throw new BootphpException("Need to specify a config group");
+            throw new BootphpException('Need to specify a config group');
         }
 
         if (!is_string($group)) {
-            throw new BootphpException("Config group must be a string");
-        }
-
-        if (strpos($group, '.') !== false) {
-            // Split the config group and path
-            list($group, $path) = explode('.', $group, 2);
+            throw new BootphpException('Config group must be a string');
         }
 
         if (isset($this->_groups[$group])) {
-            if (isset($path)) {
-                return Arr::path($this->_groups[$group], $path, null, '.');
-            }
             return $this->_groups[$group];
         }
 
@@ -117,18 +110,14 @@ class Config
         $sources = array_reverse($this->_sources);
 
         foreach ($sources as $source) {
-            if ($source instanceof Bootphp_Config_Reader) {
+            if ($source instanceof \Bootphp\Config\Reader) {
                 if ($source_config = $source->load($group)) {
                     $config = Arr::merge($config, $source_config);
                 }
             }
         }
 
-        $this->_groups[$group] = new Config_Group($this, $group, $config);
-
-        if (isset($path)) {
-            return Arr::path($config, $path, null, '.');
-        }
+        $this->_groups[$group] = new Group($this, $group, $config);
 
         return $this->_groups[$group];
     }

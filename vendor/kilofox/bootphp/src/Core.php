@@ -4,6 +4,8 @@ namespace Bootphp;
 
 use Bootphp\BootphpException;
 use Bootphp\Log\Log;
+use Bootphp\Config\Config;
+use Bootphp\Filesystem;
 
 /**
  * Contains the most low-level helpers methods in Bootphp:
@@ -87,7 +89,7 @@ class Core
     public static $cache_life = 60;
 
     /**
-     * @var  boolean  Whether to use internal caching for [Core::find_file], does not apply to [Core::cache]. Set by [Core::init]
+     * @var  boolean  Whether to use internal caching for [Filesystem::findFile], does not apply to [Core::cache]. Set by [Core::init]
      */
     public static $caching = false;
 
@@ -159,14 +161,14 @@ class Core
      *
      * Type      | Setting    | Description                                    | Default Value
      * ----------|------------|------------------------------------------------|---------------
-     * `string`  | base_url   | The base URL for your application.  This should be the *relative* path from your ROOT_PATH to your `index.php` file, in other words, if Bootphp is in a subfolder, set this to the subfolder name, otherwise leave it as the default.  **The leading slash is required**, trailing slash is optional.   | `"/"`
+     * `string`  | base_url   | The base URL for your application.  This should be the *relative* path from your PUB_PATH to your `index.php` file, in other words, if Bootphp is in a subfolder, set this to the subfolder name, otherwise leave it as the default.  **The leading slash is required**, trailing slash is optional.   | `"/"`
      * `string`  | index_file | The name of the [front controller](http://en.wikipedia.org/wiki/Front_Controller_pattern).  This is used by Bootphp to generate relative urls like [HTML::anchor()] and [URL::base()]. This is usually `index.php`.  To [remove index.php from your urls](tutorials/clean-urls), set this to `false`. | `"index.php"`
      * `string`  | charset    | Character set used for all input and output    | `"utf-8"`
      * `string`  | cache_dir  | Bootphp's cache directory.  Used by [Core::cache] for simple internal caching, like [Fragments](bootphp/fragments) and **\[caching database queries](this should link somewhere)**.  This has nothing to do with the [Cache module](cache). | `APP_PATH."cache"`
      * `integer` | cache_life | Lifetime, in seconds, of items cached by [Core::cache]         | `60`
      * `boolean` | errors     | Should Bootphp catch PHP errors and uncaught Exceptions and show the `error_view`. See [Error Handling](bootphp/errors) for more info. <br /> <br /> Recommended setting: `true` while developing, `false` on production servers. | `true`
      * `boolean` | profile    | Whether to enable the [Profiler](bootphp/profiling). <br /> <br />Recommended setting: `true` while developing, `false` on production servers. | `true`
-     * `boolean` | caching    | Cache file locations to speed up [Core::find_file].  This has nothing to do with [Core::cache], [Fragments](bootphp/fragments) or the [Cache module](cache).  <br /> <br />  Recommended setting: `false` while developing, `true` on production servers. | `false`
+     * `boolean` | caching    | Cache file locations to speed up [Filesystem::findFile].  This has nothing to do with [Core::cache], [Fragments](bootphp/fragments) or the [Cache module](cache).  <br /> <br />  Recommended setting: `false` while developing, `true` on production servers. | `false`
      * `boolean` | expose     | Set the X-Powered-By header
      *
      * @throws  BootphpException
@@ -269,7 +271,7 @@ class Core
 
         if (self::$caching === true) {
             // Load the file path cache
-            self::$_files = self::cache('Core::find_file()');
+            self::$_files = self::cache('Filesystem::findFile()');
         }
 
         if (isset($settings['base_url'])) {
@@ -453,7 +455,7 @@ class Core
 
         $file .= str_replace('_', DIRECTORY_SEPARATOR, $class);
 
-        if ($path = self::find_file($directory, $file)) {
+        if ($path = Filesystem::findFile($directory, $file)) {
             // Load the class file
             require $path;
 
@@ -480,7 +482,7 @@ class Core
         // Transform the class name into a path
         $file = str_replace('_', DIRECTORY_SEPARATOR, strtolower($class));
 
-        if ($path = self::find_file($directory, $file)) {
+        if ($path = Filesystem::findFile($directory, $file)) {
             // Load the class file
             require $path;
 
@@ -501,175 +503,6 @@ class Core
     public static function include_paths()
     {
         return self::$_paths;
-    }
-
-    /**
-     * Searches for a file in the [Cascading Filesystem](bootphp/files), and
-     * returns the path to the file that has the highest precedence, so that it
-     * can be included.
-     *
-     * When searching the "config", "messages", or "i18n" directories, or when
-     * the `$array` flag is set to true, an array of all the files that match
-     * that path in the [Cascading Filesystem](bootphp/files) will be returned.
-     * These files will return arrays which must be merged together.
-     *
-     * If no extension is given, the default extension `.php` will be used.
-     *
-     *     // Returns an absolute path to views/template.php
-     *     Core::find_file('views', 'template');
-     *
-     *     // Returns an absolute path to media/css/style.css
-     *     Core::find_file('media', 'css/style', 'css');
-     *
-     *     // Returns an array of all the "mimes" configuration files
-     *     Core::find_file('config', 'mimes');
-     *
-     * @param   string  $dir    directory name (views, i18n, classes, extensions, etc.)
-     * @param   string  $file   filename with subdirectory
-     * @param   string  $ext    extension to search for
-     * @param   boolean $array  return an array of files?
-     * @return  array   a list of files when $array is true
-     * @return  string  single file path
-     */
-    public static function find_file($dir, $file, $ext = null, $array = false)
-    {
-        if ($ext === null) {
-            // Use the default extension
-            $ext = '.php';
-        } elseif ($ext) {
-            // Prefix the extension with a period
-            $ext = ".{$ext}";
-        } else {
-            // Use no extension
-            $ext = '';
-        }
-
-        // Create a partial path of the filename
-        $path = $dir . DIRECTORY_SEPARATOR . $file . $ext;
-
-        if (self::$caching === true and isset(self::$_files[$path . ($array ? '_array' : '_path')])) {
-            // This path has been cached
-            return self::$_files[$path . ($array ? '_array' : '_path')];
-        }
-
-        if (self::$profiling === true and class_exists('Profiler', false)) {
-            // Start a new benchmark
-            $benchmark = Profiler::start('Bootphp', __FUNCTION__);
-        }
-
-        if ($array or $dir === 'config' or $dir === 'i18n' or $dir === 'messages') {
-            // Include paths must be searched in reverse
-            $paths = array_reverse(self::$_paths);
-
-            // Array of files that have been found
-            $found = [];
-
-            foreach ($paths as $dir) {
-                if (is_file($dir . $path)) {
-                    // This path has a file, add it to the list
-                    $found[] = $dir . $path;
-                }
-            }
-        } else {
-            // The file has not been found yet
-            $found = false;
-
-            foreach (self::$_paths as $dir) {
-                $file = $dir . DIRECTORY_SEPARATOR . $path;
-                if (is_file($file)) {
-                    // A path has been found
-                    $found = $file;
-
-                    // Stop searching
-                    break;
-                }
-            }
-        }
-
-        if (self::$caching === true) {
-            // Add the path to the cache
-            self::$_files[$path . ($array ? '_array' : '_path')] = $found;
-
-            // Files have been changed
-            self::$_files_changed = true;
-        }
-
-        if (isset($benchmark)) {
-            // Stop the benchmark
-            Profiler::stop($benchmark);
-        }
-
-        return $found;
-    }
-
-    /**
-     * Recursively finds all of the files in the specified directory at any
-     * location in the [Cascading Filesystem](bootphp/files), and returns an
-     * array of all the files found, sorted alphabetically.
-     *
-     *     // Find all view files.
-     *     $views = Core::list_files('views');
-     *
-     * @param   string  $directory  directory name
-     * @param   array   $paths      list of paths to search
-     * @return  array
-     */
-    public static function list_files($directory = null, array $paths = null)
-    {
-        if ($directory !== null) {
-            // Add the directory separator
-            $directory .= DIRECTORY_SEPARATOR;
-        }
-
-        if ($paths === null) {
-            // Use the default paths
-            $paths = self::$_paths;
-        }
-
-        // Create an array for the files
-        $found = [];
-
-        foreach ($paths as $path) {
-            if (is_dir($path . $directory)) {
-                // Create a new directory iterator
-                $dir = new DirectoryIterator($path . $directory);
-
-                foreach ($dir as $file) {
-                    // Get the file name
-                    $filename = $file->getFilename();
-
-                    if ($filename[0] === '.' or $filename[strlen($filename) - 1] === '~') {
-                        // Skip all hidden files and UNIX backup files
-                        continue;
-                    }
-
-                    // Relative filename is the array key
-                    $key = $directory . $filename;
-
-                    if ($file->isDir()) {
-                        if ($sub_dir = self::list_files($key, $paths)) {
-                            if (isset($found[$key])) {
-                                // Append the sub-directory list
-                                $found[$key] += $sub_dir;
-                            } else {
-                                // Create a new sub-directory list
-                                $found[$key] = $sub_dir;
-                            }
-                        }
-                    } else {
-                        if (!isset($found[$key])) {
-                            // Add new files to the list
-                            $found[$key] = realpath($file->getPathName());
-                        }
-                    }
-                }
-            }
-        }
-
-        // Sort the results alphabetically
-        ksort($found);
-
-        return $found;
     }
 
     /**
@@ -791,7 +624,7 @@ class Core
             // Create a new message list
             $messages[$file] = [];
 
-            if ($files = self::find_file('messages', $file)) {
+            if ($files = Filesystem::findFile('messages', $file)) {
                 foreach ($files as $f) {
                     // Combine all the messages recursively
                     $messages[$file] = Arr::merge($messages[$file], self::load($f));
@@ -843,7 +676,7 @@ class Core
         try {
             if (self::$caching === true and self::$_files_changed === true) {
                 // Write the file path cache
-                self::cache('Core::find_file()', self::$_files);
+                self::cache('Filesystem::findFile()', self::$_files);
             }
         } catch (\Exception $e) {
             // Pass the exception to the handler

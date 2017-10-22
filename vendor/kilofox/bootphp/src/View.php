@@ -46,8 +46,8 @@ class View
      *
      *     $output = View::capture($file, $data);
      *
-     * @param   string  $bootphp_view_filename   filename
-     * @param   array   $bootphp_view_data       variables
+     * @param   string  $bootphp_view_filename   Filename
+     * @param   array   $bootphp_view_data       Variables
      * @return  string
      * @throws  Exception
      */
@@ -88,7 +88,7 @@ class View
      * You can also use an array or Traversable object to set several values at once:
      *
      *     // Create the values $food and $beverage in the view
-     *     View::set_global(array('food' => 'bread', 'beverage' => 'water'));
+     *     View::set_global(['food' => 'bread', 'beverage' => 'water']);
      *
      * [!!] Note: When setting with using Traversable object we're not attaching the whole object to the view,
      * i.e. the object's standard properties will not be available in the view context.
@@ -123,9 +123,25 @@ class View
         self::$_global_data[$key] = & $value;
     }
 
-    // View filename
+    /**
+     * View filename.
+     *
+     * @var type
+     */
     protected $_file;
-    // Array of local variables
+
+    /**
+     * A path where to look for templates.
+     *
+     * @var string
+     */
+    protected $path = APP_PATH . '/view';
+
+    /**
+     * Array of local variables.
+     *
+     * @var type
+     */
     protected $_data = [];
 
     /**
@@ -169,7 +185,7 @@ class View
         } elseif (array_key_exists($key, self::$_global_data)) {
             return self::$_global_data[$key];
         } else {
-            throw new BootphpException('View variable is not set: :var', array(':var' => $key));
+            throw new BootphpException('View variable is not set: :var', [':var' => $key]);
         }
     }
 
@@ -244,22 +260,49 @@ class View
      *     $view->set_filename($file);
      *
      * @param   string  $file   View filename
+     * @param   string  $ext    Extension to search for
      * @return  View
      * @throws  BootphpException
      */
-    public function set_filename($file)
+    public function set_filename($file, $ext = null)
     {
-        $path = $file;
+        if ($ext === null) {
+            // Use the default extension
+            $ext = '.php';
+        } elseif ($ext) {
+            // Prefix the extension with a period
+            $ext = ".{$ext}";
+        } else {
+            // Use no extension
+            $ext = '';
+        }
+
+        $path = $file . $ext;
+
         if ($path === false) {
-            throw new BootphpException('The requested view :file could not be found', array(
-            ':file' => $file,
-            ));
+            throw new BootphpException('The requested view :file could not be found', [':file' => $file]);
         }
 
         // Store the file path locally
         $this->_file = $path;
 
         return $this;
+    }
+
+    /**
+     * Sets the path where templates are stored.
+     *
+     * @param string $path      A path where to look for templates
+     *
+     * @throws BootphpException
+     */
+    public function setPath($path)
+    {
+        if (!is_dir($path)) {
+            throw new BootphpException('The ":path" directory does not exist.', [':path' => $path]);
+        }
+
+        $this->path = rtrim($path, '/\\');
     }
 
     /**
@@ -272,7 +315,7 @@ class View
      * You can also use an array or Traversable object to set several values at once:
      *
      *     // Create the values $food and $beverage in the view
-     *     $view->set(array('food' => 'bread', 'beverage' => 'water'));
+     *     $view->set(['food' => 'bread', 'beverage' => 'water']);
      *
      * [!!] Note: When setting with using Traversable object we're not attaching the whole object to the view,
      * i.e. the object's standard properties will not be available in the view context.
@@ -319,7 +362,7 @@ class View
         }
 
         // Combine local and global data and capture the output
-        return self::capture($this->_file, $this->_data);
+        return self::capture($this->path . '/' . $this->_file, $this->_data);
     }
 
 }

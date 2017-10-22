@@ -50,47 +50,6 @@ To modify a value call [Config_Group::set]:
 	$config = Bootphp::$config->load('my_group');
 	$config->set('var', 'new_value');
 
-### Alternative methods for getting / setting config
-
-In addition to the methods described above you can also access config values using dots to outline a path
-from the config group to the value you want:
-
-	// Config file: database.php
-	return array(
-		'default' => array(
-			'connection' => array(
-				'hostname' => 'localhost'
-			)
-		)
-	);
-
-	// Code which needs hostname:
-	$hostname = Bootphp::$config->load('database.default.connection.hostname');
-
-
-Which is equivalent to:
-
-	$config = Bootphp::$config->load('database')->get('default');
-
-	$hostname = $config['connection']['hostname'];
-
-Obviously this method is a lot more compact than the original. However, please bear in mind that using
-`dot.notation` is a _lot_ slower than calling `get()` and traversing the array yourself.  Dot notation
-can be useful if you only need one specific variable, but otherwise it's best to use `get()`.
-
-As [Config_Group] extends [Array_Object](http://php.net/manual/en/class.arrayobject.php) you can also use array
-syntax to get/set config vars:
-
-	$config = Bootphp::$config->load('database');
-
-	// Getting the var
-	$hostname = $config['default']['connection']['hostname'];
-
-	// Setting the var
-	$config['default']['connection']['hostname'] = '127.0.0.1';
-
-Again, this syntax is more costly than calling `get()` / `set()`.
-
 ## Config Merging
 
 One of the useful features of the config system is config group merging. This works in a similar way
@@ -106,10 +65,10 @@ The position of sources in the stack is determined by how they are loaded in you
 By default when you load a source it is pushed to the top of a stack:
 
     // Stack: <empty>
-	Bootphp::$config->attach(new Config_File);
-	// Stack: Config_File
-	Bootphp::$config->attach(new Config_Database);
-	// Stack: Config_Database, Config_File
+    Bootphp::$config->attach(new Config_File);
+    // Stack: Config_File
+    Bootphp::$config->attach(new Config_Database);
+    // Stack: Config_Database, Config_File
 
 In the example above, any config values found in the database will override those found in the filesystem.
 For example, using the setup outlined above:
@@ -120,13 +79,13 @@ For example, using the setup outlined above:
 				email: my.awesome.address@example.com
 				name:  Unknown
 			method: smtp
-
+	
 	// Configuration in the database:
 		email:
 			sender:
 				email: my.supercool.address@gmail.com
 				name:  Bootphp Bot
-
+	
 	// Configuration returned by Bootphp::$config->load('email')
 		email:
 			sender:
@@ -153,13 +112,13 @@ In this example, any values found in the filesystem will override those found in
 				email: my.awesome.address@example.com
 				name:  Unknown
 			method: smtp
-
+	
 	// Configuration in the database:
 		email:
 			sender:
 				email: my.supercool.address@gmail.com
 				name:  Bootphp Bot
-
+	
 	// Configuration returned by Bootphp::$config->load('email')
 		email:
 			sender:

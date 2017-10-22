@@ -48,7 +48,7 @@
 
 </span><span class="line"><span class="number">211</span> 	public function set_filename($file)
 </span><span class="line"><span class="number">212</span> 	{
-</span><span class="line"><span class="number">213</span> 		if (($path = Core::find_file('views', $file)) === false)
+</span><span class="line"><span class="number">213</span> 		if (($path = Filesystem::findFile('views', $file)) === false)
 </span><span class="line"><span class="number">214</span> 		{
 </span><span class="line highlight"><span class="number">215</span> 			throw new BootphpException('The requested view :file could not be found', array(
 </span><span class="line"><span class="number">216</span> 				':file' =&gt; $file,
@@ -256,7 +256,7 @@
             <li>
                 <p>
                     <span class="file">
-                        <a href="#error4ac2453378034source6" onclick="return koggle('error4ac2453378034source6')">ROOT_PATH/index.php [ 106 ]</a>
+                        <a href="#error4ac2453378034source6" onclick="return koggle('error4ac2453378034source6')">PUB_PATH/index.php [ 106 ]</a>
                     </span>
                     &raquo;
                     require(<a href="#error4ac2453378034args6" onclick="return koggle('error4ac2453378034args6')">arguments</a>)
@@ -289,7 +289,7 @@
         <div id="error4ac2453378034environment_included" class="collapsed">
             <table cellspacing="0">
                 <tr>
-                    <td><code>ROOT_PATH/index.php</code></td>
+                    <td><code>PUB_PATH/index.php</code></td>
                 </tr>
                 <tr>
                     <td><code>SYS_PATH/base.php</code></td>

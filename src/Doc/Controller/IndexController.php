@@ -4,6 +4,13 @@ namespace App\Doc\Controller;
 
 use Bootphp\Controller\Template;
 use Bootphp\Route;
+use Bootphp\URL;
+use Michelf\Markdown;
+use App\Doc\Kodoc\Kodoc_Markdown;
+use Bootphp\Core;
+use Bootphp\View;
+use Bootphp\Filesystem;
+use Bootphp\File;
 
 /**
  * Bootphp user guide and api browser.
@@ -14,7 +21,7 @@ use Bootphp\Route;
  */
 class IndexController extends Template
 {
-    public $template = 'userguide/template';
+    public $template = 'doc/template';
     // Routes
     protected $media;
     protected $api;
@@ -29,8 +36,8 @@ class IndexController extends Template
             $this->auto_render = false;
         } else {
             // Grab the necessary routes
-            $this->media = Route::get('docs/media');
-            $this->guide = Route::get('docs/guide');
+            $this->media = Route::get('doc/media');
+            $this->guide = Route::get('doc/guide');
 
             // Set the base URL for links and images
             Kodoc_Markdown::$base_url = URL::site($this->guide->uri()) . '/';
@@ -38,16 +45,16 @@ class IndexController extends Template
         }
 
         // Default show_comments to config value
-        $this->template->show_comments = Core::$config->load('userguide.show_comments');
+        $this->template->show_comments = Core::$config->load('userguide')->get('show_comments');
     }
 
     // List all modules that have userguides
-    public function index()
+    public function indexAction()
     {
-        $this->template->title = "Userguide";
-        $this->template->breadcrumb = array('User Guide');
-        $this->template->content = View::factory('userguide/index', array('modules' => $this->_modules()));
-        $this->template->menu = View::factory('userguide/menu', array('modules' => $this->_modules()));
+        $this->template->title = 'Userguide';
+        $this->template->breadcrumb = ['User Guide'];
+        $this->template->content = View::factory('doc/index', ['modules' => $this->_modules()]);
+        $this->template->menu = View::factory('doc/menu', ['modules' => $this->_modules()]);
 
         // Don't show disqus on the index page
         $this->template->show_comments = false;
@@ -58,7 +65,7 @@ class IndexController extends Template
     {
         $this->response->status(404);
         $this->template->title = "Userguide - Error";
-        $this->template->content = View::factory('userguide/error', array('message' => $message));
+        $this->template->content = View::factory('doc/error', ['message' => $message]);
 
         // Don't show disqus on error pages
         $this->template->show_comments = false;
@@ -70,31 +77,31 @@ class IndexController extends Template
             Kodoc_Markdown::$image_url = URL::site($this->media->uri()) . '/' . $module . '/';
 
             $this->template->menu = Kodoc_Markdown::markdown($this->_get_all_menu_markdown());
-            $this->template->breadcrumb = array(
+            $this->template->breadcrumb = [
                 $this->guide->uri() => 'User Guide',
-                $this->guide->uri(array('module' => $module)) => Core::$config->load('userguide.modules.' . $module . '.name'),
+                $this->guide->uri(['module' => $module]) => Core::$config->load('userguide.modules.' . $module . '.name'),
                 'Error'
-            );
+            ];
         }
         // If we are in the api browser, show the menu and show the api browser in the breadcrumbs
-        elseif (Route::name($this->request->route()) == 'docs/api') {
+        elseif (Route::name($this->request->route()) == 'doc/api') {
             $this->template->menu = Kodoc::menu();
 
             // Bind the breadcrumb
-            $this->template->breadcrumb = array(
-                $this->guide->uri(array('page' => null)) => 'User Guide',
+            $this->template->breadcrumb = [
+                $this->guide->uri(['page' => null]) => 'User Guide',
                 $this->request->route()->uri() => 'API Browser',
                 'Error'
-            );
+            ];
         }
         // Otherwise, show the userguide module menu on the side
         else {
-            $this->template->menu = View::factory('userguide/menu', array('modules' => $this->_modules()));
-            $this->template->breadcrumb = array($this->request->route()->uri() => 'User Guide', 'Error');
+            $this->template->menu = View::factory('doc/menu', ['modules' => $this->_modules()]);
+            $this->template->breadcrumb = [$this->request->route()->uri() => 'User Guide', 'Error'];
         }
     }
 
-    public function action_docs()
+    public function docAction()
     {
         $module = $this->request->param('module');
         $page = $this->request->param('page');
@@ -154,7 +161,7 @@ class IndexController extends Template
         // Add the breadcrumb trail
         $breadcrumb = [];
         $breadcrumb[$this->guide->uri()] = 'User Guide';
-        $breadcrumb[$this->guide->uri(array('module' => $module))] = Core::$config->load('userguide.modules.' . $module . '.name');
+        $breadcrumb[$this->guide->uri(['module' => $module])] = Core::$config->load('userguide.modules.' . $module . '.name');
 
         // TODO try and get parent category names (from menu).  Regex magic or javascript dom stuff perhaps?
         // Only add the current page title to breadcrumbs if it isn't the index, otherwise we get repeats.
@@ -163,11 +170,11 @@ class IndexController extends Template
         }
     }
 
-    public function action_api()
+    public function apiAction()
     {
         // Enable the missing class autoloader.  If a class cannot be found a
         // fake class will be created that extends Kodoc_Missing
-        spl_autoload_register(array('Kodoc_Missing', 'create_class'));
+        spl_autoload_register(['Kodoc_Missing', 'create_class']);
 
         // Get the class from the request
         $class = $this->request->param('class');
@@ -176,7 +183,7 @@ class IndexController extends Template
         if (!$class) {
             $this->template->title = 'Table of Contents';
 
-            $this->template->content = View::factory('userguide/api/toc')
+            $this->template->content = View::factory('doc/api/toc')
                 ->set('classes', Kodoc::class_methods())
                 ->set('route', $this->request->route());
         } else {
@@ -186,7 +193,7 @@ class IndexController extends Template
             // If the class requested and the actual class name are different
             // (different case, orm vs ORM, auth vs Auth) redirect
             if ($_class->class->name != $class) {
-                $this->redirect($this->request->route()->uri(array('class' => $_class->class->name)));
+                $this->redirect($this->request->route()->uri(['class' => $_class->class->name]));
             }
 
             // If this classes immediate parent is Kodoc_Missing, then it should 404
@@ -200,7 +207,7 @@ class IndexController extends Template
             // Everything is fine, display the class.
             $this->template->title = $class;
 
-            $this->template->content = View::factory('userguide/api/class')
+            $this->template->content = View::factory('doc/api/class')
                 ->set('doc', $_class)
                 ->set('route', $this->request->route());
         }
@@ -213,12 +220,12 @@ class IndexController extends Template
 
         // Add the breadcrumb
         $breadcrumb = [];
-        $breadcrumb[$this->guide->uri(array('page' => null))] = 'User Guide';
+        $breadcrumb[$this->guide->uri(['page' => null])] = 'User Guide';
         $breadcrumb[$this->request->route()->uri()] = 'API Browser';
         $breadcrumb[] = $this->template->title;
     }
 
-    public function action_media()
+    public function mediaAction()
     {
         // Get the file path from the request
         $file = $this->request->param('file');
@@ -229,7 +236,7 @@ class IndexController extends Template
         // Remove the extension from the filename
         $file = substr($file, 0, -(strlen($ext) + 1));
 
-        if ($file = Core::find_file('media/guide', $file, $ext)) {
+        if ($file = Filesystem::findFile('public/doc/media', $file, $ext)) {
             // Check if the browser sent an "if-none-match: <etag>" header, and tell if the file hasn't changed
             $this->check_cache(sha1($this->request->uri()) . filemtime($file));
 
@@ -249,26 +256,26 @@ class IndexController extends Template
     {
         if ($this->auto_render) {
             // Get the media route
-            $media = Route::get('docs/media');
+            $media = Route::get('doc/media');
 
             // Add styles
-            $this->template->styles = array(
-                $media->uri(array('file' => 'css/print.css')) => 'print',
-                $media->uri(array('file' => 'css/screen.css')) => 'screen',
-                $media->uri(array('file' => 'css/kodoc.css')) => 'screen',
-                $media->uri(array('file' => 'css/shCore.css')) => 'screen',
-                $media->uri(array('file' => 'css/shThemeKodoc.css')) => 'screen',
-            );
+            $this->template->styles = [
+                $media->uri(['file' => 'css/print.css']) => 'print',
+                $media->uri(['file' => 'css/screen.css']) => 'screen',
+                $media->uri(['file' => 'css/kodoc.css']) => 'screen',
+                $media->uri(['file' => 'css/shCore.css']) => 'screen',
+                $media->uri(['file' => 'css/shThemeKodoc.css']) => 'screen',
+            ];
 
             // Add scripts
-            $this->template->scripts = array(
-                $media->uri(array('file' => 'js/jquery.min.js')),
-                $media->uri(array('file' => 'js/jquery.cookie.js')),
-                $media->uri(array('file' => 'js/kodoc.js')),
+            $this->template->scripts = [
+                $media->uri(['file' => 'js/jquery.min.js']),
+                $media->uri(['file' => 'js/jquery.cookie.js']),
+                $media->uri(['file' => 'js/kodoc.js']),
                 // Syntax Highlighter
-                $media->uri(array('file' => 'js/shCore.js')),
-                $media->uri(array('file' => 'js/shBrushPhp.js')),
-            );
+                $media->uri(['file' => 'js/shCore.js']),
+                $media->uri(['file' => 'js/shBrushPhp.js']),
+            ];
 
             // Add languages
             $this->template->translations = Core::message('userguide', 'translations');
@@ -293,14 +300,13 @@ class IndexController extends Template
      */
     public function file($page)
     {
-
         // Strip optional .md or .markdown suffix from the passed filename
         $info = pathinfo($page);
         if (isset($info['extension'])
             and ( ($info['extension'] === 'md') or ( $info['extension'] === 'markdown'))) {
             $page = $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'];
         }
-        return Core::find_file('guide', $page, 'md');
+        return Filesystem::findFile('guide', $page, 'md');
     }
 
     public function section($page)
@@ -345,15 +351,20 @@ class IndexController extends Template
         return $markdown;
     }
 
-    // Get the list of modules from the config, and reverses it so it displays in the order the modules are added, but move Bootphp to the top.
+    /**
+     * Get the list of modules from the config, and reverses it so it displays
+     * in the order the modules are added, but move Bootphp to the top.
+     *
+     * @return  array
+     */
     protected function _modules()
     {
-        $modules = array_reverse(Core::$config->load('userguide.modules'));
+        $modules = array_reverse(Core::$config->load('userguide')->get('modules', []));
 
         if (isset($modules['bootphp'])) {
             $bootphp = $modules['bootphp'];
             unset($modules['bootphp']);
-            $modules = array_merge(array('bootphp' => $bootphp), $modules);
+            $modules = array_merge(['bootphp' => $bootphp], $modules);
         }
 
         // Remove modules that have been disabled via config

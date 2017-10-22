@@ -2,6 +2,9 @@
 
 namespace Bootphp\Config\File;
 
+use Bootphp\Core;
+use Bootphp\Filesystem;
+
 /**
  * File-based configuration reader. Multiple configuration directories can be
  * used by attaching multiple instances of this class to [Bootphp_Config].
@@ -34,15 +37,15 @@ class Reader implements \Bootphp\Config\Reader
      *
      *     $config->load($name);
      *
-     * @param   string  $group  configuration group name
-     * @return  $this   current object
+     * @param   string  $group  Configuration group name
+     * @return  $this   Current object
      * @uses    Core::load
      */
     public function load($group)
     {
         $config = [];
 
-        if ($files = Core::find_file($this->_directory, $group, null, true)) {
+        if ($files = Filesystem::findFile($this->_directory, $group, null, true)) {
             foreach ($files as $file) {
                 // Merge each file to the configuration array
                 $config = Arr::merge($config, Core::load($file));

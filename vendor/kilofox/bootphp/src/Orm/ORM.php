@@ -1104,7 +1104,7 @@ class ORM extends Model implements \serializable
                 $value = call_user_funcArray($filter, $params);
             } elseif (strpos($filter, '::') === false) {
                 // Use a function call
-                $function = new ReflectionFunction($filter);
+                $function = new \ReflectionFunction($filter);
 
                 // Call $function($this[$field], $param, ...) with Reflection
                 $value = $function->invokeArgs($params);

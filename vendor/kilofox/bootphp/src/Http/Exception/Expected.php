@@ -31,7 +31,7 @@ abstract class ExceptionExpected extends HttpException
      * @param   array   $variables  translation variables
      * @return  void
      */
-    public function __construct($message = null, array $variables = null, Exception $previous = null)
+    public function __construct($message = null, array $variables = null, \Exception $previous = null)
     {
         parent::__construct($message, $variables, $previous);
 

@@ -208,10 +208,7 @@ class HTML
         // Set the stylesheet rel
         $attributes['rel'] = empty($attributes['rel']) ? 'stylesheet' : $attributes['rel'];
 
-        // Set the stylesheet type
-        $attributes['type'] = 'text/css';
-
-        return '<link' . HTML::attributes($attributes) . ' />';
+        return '<link' . HTML::attributes($attributes) . '>';
     }
 
     /**
@@ -236,9 +233,6 @@ class HTML
 
         // Set the script link
         $attributes['src'] = $file;
-
-        // Set the script type
-        $attributes['type'] = 'text/javascript';
 
         return '<script' . HTML::attributes($attributes) . '></script>';
     }

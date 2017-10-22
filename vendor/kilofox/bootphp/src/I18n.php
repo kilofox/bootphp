@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\Filesystem;
+
 /**
  * Internationalization (i18n) class. Provides language loading and translation
  * methods without dependencies on [gettext](http://php.net/gettext).
@@ -107,7 +109,7 @@ class I18n
             // Create a path for this set of parts
             $path = implode(DIRECTORY_SEPARATOR, $parts);
 
-            if ($files = Core::find_file('i18n', $path, null, true)) {
+            if ($files = Filesystem::findFile('i18n', $path, null, true)) {
                 $t = [];
                 foreach ($files as $file) {
                     // Merge the language strings into the sub table

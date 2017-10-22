@@ -355,7 +355,7 @@ class Validation implements \ArrayAccess
                     $passed = $method->invokeArgs(null, $params);
                 } elseif (strpos($rule, '::') === false) {
                     // Use a function call
-                    $function = new ReflectionFunction($rule);
+                    $function = new \ReflectionFunction($rule);
 
                     // Call $function($this[$field], $param, ...) with Reflection
                     $passed = $function->invokeArgs($params);

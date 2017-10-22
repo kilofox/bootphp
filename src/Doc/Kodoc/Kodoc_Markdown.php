@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Doc\Kodoc;
+
+use Michelf\MarkdownExtra;
+use Bootphp\Filesystem;
+
 /**
  * Custom Markdown parser for Bootphp documentation.
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Kodoc_Markdown extends MarkdownExtra_Parser
+class Kodoc_Markdown extends MarkdownExtra
 {
     /**
      * @var  string  base url for links
@@ -166,7 +171,7 @@ class Bootphp_Kodoc_Markdown extends MarkdownExtra_Parser
             foreach ($matches as $set) {
                 list($search, $view) = $set;
 
-                if (Core::find_file('views', $view)) {
+                if (Filesystem::findFile('views', $view)) {
                     try {
                         $replace[$search] = View::factory($view)->render();
                     } catch (\Exception $e) {

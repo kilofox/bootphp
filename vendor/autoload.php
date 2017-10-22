@@ -14,6 +14,7 @@ class AutoloaderInit
         'Bootphp\\' => array(__DIR__ . '/kilofox/bootphp/src'),
         'App\\' => array(__DIR__ . '/../src'),
         'Tests\\' => array(__DIR__ . '/../tests'),
+        'Michelf\\' => array(__DIR__ . '/Michelf'),
     ];
 
     public static function loadClassLoader($class)

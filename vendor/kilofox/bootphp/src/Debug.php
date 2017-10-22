@@ -197,7 +197,7 @@ class Debug
      * when you want to display a shorter path.
      *
      *     // Displays SYS_PATH/classes/bootphp.php
-     *     echo Debug::path(Core::find_file('classes', 'bootphp'));
+     *     echo Debug::path(Filesystem::findFile('classes', 'bootphp'));
      *
      * @param   string  $file   path to debug
      * @return  string
@@ -208,8 +208,8 @@ class Debug
             $file = 'APP_PATH' . substr($file, strlen(APP_PATH));
         } elseif (strpos($file, VEN_PATH) === 0) {
             $file = 'VEN_PATH' . substr($file, strlen(VEN_PATH));
-        } elseif (strpos($file, ROOT_PATH) === 0) {
-            $file = 'ROOT_PATH' . substr($file, strlen(ROOT_PATH));
+        } elseif (strpos($file, PUB_PATH) === 0) {
+            $file = 'PUB_PATH' . substr($file, strlen(PUB_PATH));
         }
 
         return $file;
@@ -338,7 +338,7 @@ class Debug
                             $reflection = new ReflectionMethod($step['class'], '__call');
                         }
                     } else {
-                        $reflection = new ReflectionFunction($step['function']);
+                        $reflection = new \ReflectionFunction($step['function']);
                     }
 
                     // Get the function parameters

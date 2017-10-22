@@ -1,6 +1,10 @@
 <?php
 
-include_once(Core::find_file('tests/cache/arithmetic', 'CacheArithmeticMethods'));
+namespace Bootphp\Cache\tests\cache\arithmetic;
+
+use Bootphp\Filesystem;
+
+include_once(Filesystem::findFile('tests/cache/arithmetic', 'CacheArithmeticMethods'));
 /**
  * @group      bootphp
  * @group      bootphp.cache

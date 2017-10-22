@@ -3,7 +3,7 @@
 /**
  * Tests Bootphp Core
  *
- * @TODO Use a virtual filesystem (see phpunit doc on mocking fs) for find_file etc.
+ * @TODO Use a virtual filesystem (see phpunit doc on mocking fs) for findFile etc.
  *
  * @group bootphp
  * @group bootphp.core

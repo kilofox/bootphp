@@ -1,5 +1,5 @@
 <style>
-<?php include Core::find_file('views', 'profiler/style', 'css') ?>
+<?php include Filesystem::findFile('views', 'profiler/style', 'css') ?>
 </style>
 
 <?php

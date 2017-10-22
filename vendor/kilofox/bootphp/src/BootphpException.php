@@ -192,7 +192,7 @@ class BootphpException extends \Exception
 
             // Instantiate the error view.
             $view = \Bootphp\View::factory('error', get_defined_vars());
-            $view->set_filename(VEN_PATH . '/kilofox/bootphp/view/exception/error.php');
+            $view->setPath(VEN_PATH . '/kilofox/bootphp/view/exception');
 
             // Prepare the response object.
             $response = Response::factory();

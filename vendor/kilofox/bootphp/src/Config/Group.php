@@ -1,10 +1,14 @@
 <?php
 
+namespace Bootphp\Config;
+
+use Bootphp\Config\Config;
+
 /**
  * The group wrapper acts as an interface to all the config directives
  * gathered from across the system.
  *
- * This is the object returned from Bootphp_Config::load
+ * This is the object returned from Bootphp\Config\Config::load
  *
  * Any modifications to configuration items should be done through an instance of this object
  *
@@ -12,12 +16,12 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Config_Group extends ArrayObject
+class Group extends \ArrayObject
 {
     /**
      * Reference the config object that created this group
      * Used when updating config
-     * @var Bootphp_Config
+     * @var Config
      */
     protected $_parent_instance = null;
 
@@ -29,19 +33,19 @@ class Bootphp_Config_Group extends ArrayObject
     protected $_group_name = '';
 
     /**
-     * Constructs the group object.  Bootphp_Config passes the config group
+     * Constructs the group object. Bootphp\Config\Config passes the config group
      * and its config items to the object here.
      *
-     * @param Bootphp_Config  $instance "Owning" instance of Bootphp_Config
+     * @param Config  $instance "Owning" instance of Bootphp\Config\Config
      * @param string         $group    The group name
      * @param array          $config   Group's config
      */
-    public function __construct(Bootphp_Config $instance, $group, array $config = [])
+    public function __construct(Config $instance, $group, array $config = [])
     {
         $this->_parent_instance = $instance;
         $this->_group_name = $group;
 
-        parent::__construct($config, ArrayObject::ARRAY_AS_PROPS);
+        parent::__construct($config, \ArrayObject::ARRAY_AS_PROPS);
     }
 
     /**
@@ -107,7 +111,7 @@ class Bootphp_Config_Group extends ArrayObject
     }
 
     /**
-     * Overrides ArrayObject::offsetSet()
+     * Overrides \ArrayObject::offsetSet()
      * This method is called when config is changed via
      *
      *     $config->var = 'asd';

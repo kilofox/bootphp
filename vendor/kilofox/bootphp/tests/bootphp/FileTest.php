@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\tests\bootphp;
+
+use Bootphp\Filesystem;
+
 /**
  * Tests Bootphp File helper
  *
@@ -23,7 +27,7 @@ class Bootphp_FileTest extends Unittest_TestCase
     {
         return array(
             // $value, $result
-            array(Core::find_file('tests', 'test_data/github', 'png'), 'image/png'),
+            array(Filesystem::findFile('tests', 'test_data/github', 'png'), 'image/png'),
         );
     }
 
@@ -50,7 +54,7 @@ class Bootphp_FileTest extends Unittest_TestCase
     {
         return array(
             // $value, $result
-            array(Core::find_file('tests', 'test_data/github', 'png'), .01, 1),
+            array(Filesystem::findFile('tests', 'test_data/github', 'png'), .01, 1),
         );
     }
 
@@ -68,7 +72,7 @@ class Bootphp_FileTest extends Unittest_TestCase
         $this->assertSame($expected, File::split($input, $peices));
         $this->assertSame($expected, File::join($input));
 
-        foreach (glob(Core::find_file('tests', 'test_data/github', 'png') . '.*') as $file) {
+        foreach (glob(Filesystem::findFile('tests', 'test_data/github', 'png') . '.*') as $file) {
             unlink($file);
         }
     }

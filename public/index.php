@@ -31,17 +31,9 @@ date_default_timezone_set('UTC');
  */
 setlocale(LC_ALL, 'en_US.utf-8');
 
-/**
- * End of standard configuration! Changing any of the code below should only be
- * attempted by those with a working knowledge of Bootphp internals.
- *
- * @link http://kilofox.net/guide/using.configuration
- */
-// Set the full path to the docroot.
-define('ROOT_PATH', __DIR__);
-
 // Define the absolute paths.
-define('APP_PATH', realpath(__DIR__ . '/../src'));
+define('PUB_PATH', __DIR__);
+define('APP_PATH', realpath(__DIR__ . '/..'));
 define('VEN_PATH', realpath(__DIR__ . '/../vendor'));
 
 /**
@@ -97,7 +89,7 @@ if (isset($_SERVER['BOOTPHP_ENV'])) {
  * - boolean  expose      set the X-Powered-By header                        false
  */
 Bootphp\Core::init(array(
-    'base_url' => '/frameworks/bootphp/',
+    'base_url' => '/frameworks/bootphp/public',
 ));
 
 /**
@@ -123,12 +115,43 @@ Bootphp\Cookie::$salt = 'null';
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+
+// Static file serving (CSS, JS, images)
+Bootphp\Route::set('doc/media', 'doc/media(/<file>)', array('file' => '.+'))
+    ->defaults(array(
+        'directory' => 'doc',
+        'controller' => 'index',
+        'action' => 'media',
+        'file' => null,
+    ));
+
+// API Browser, if enabled
+if (Bootphp\Core::$config->load('userguide.api_browser') === true) {
+    Bootphp\Route::set('doc/api', 'guide-api(/<class>)', array('class' => '[a-zA-Z0-9_]+'))
+        ->defaults(array(
+            'controller' => 'Userguide',
+            'action' => 'api',
+            'class' => null,
+    ));
+}
+
 Bootphp\Route::set('doc', '(<directory>(/<controller>(/<id>)(/<action>)))')
     ->defaults(array(
         'directory' => 'doc',
         'controller' => 'index',
         'action' => 'index',
     ));
+
+// User guide pages, in modules
+Bootphp\Route::set('doc/guide', 'guide(/<module>(/<page>))', array(
+        'page' => '.+',
+    ))
+    ->defaults(array(
+        'controller' => 'Userguide',
+        'action' => 'docs',
+        'module' => '',
+    ));
+
 Bootphp\Route::set('default', '(<controller>(/<action>(/<id>)))')
     ->defaults(array(
         'controller' => 'welcome',

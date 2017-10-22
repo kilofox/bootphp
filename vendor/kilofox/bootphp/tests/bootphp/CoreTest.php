@@ -1,9 +1,13 @@
 <?php
 
+namespace Bootphp\tests\bootphp;
+
+use Bootphp\Filesystem;
+
 /**
  * Tests Bootphp Core
  *
- * @TODO Use a virtual filesystem (see phpunit doc on mocking fs) for find_file etc.
+ * @TODO Use a virtual filesystem (see phpunit doc on mocking fs) for findFile etc.
  *
  * @group bootphp
  * @group bootphp.core
@@ -80,11 +84,11 @@ class Bootphp_CoreTest extends Unittest_TestCase
      * See issue #3214
      *
      * @test
-     * @covers  Core::find_file
+     * @covers  Filesystem::findFile
      */
-    public function test_find_file_no_extension()
+    public function test_findFile_no_extension()
     {
-        $path = Core::find_file('classes', $file = 'Bootphp/Core.php', false);
+        $path = Filesystem::findFile('classes', $file = 'Bootphp/Core.php', false);
 
         $this->assertInternalType('string', $path);
 
@@ -92,18 +96,18 @@ class Bootphp_CoreTest extends Unittest_TestCase
     }
 
     /**
-     * If a file can't be found then find_file() should return false if
+     * If a file can't be found then findFile() should return false if
      * only a single file was requested, or an empty array if multiple files
      * (i.e. configuration files) were requested
      *
      * @test
-     * @covers Core::find_file
+     * @covers Filesystem::findFile
      */
-    public function test_find_file_returns_false_or_array_on_failure()
+    public function test_findFile_returns_false_or_array_on_failure()
     {
-        $this->assertFalse(Core::find_file('configy', 'zebra'));
+        $this->assertFalse(Filesystem::findFile('configy', 'zebra'));
 
-        $this->assertSame([], Core::find_file('configy', 'zebra', null, true));
+        $this->assertSame([], Filesystem::findFile('configy', 'zebra', null, true));
     }
 
     /**

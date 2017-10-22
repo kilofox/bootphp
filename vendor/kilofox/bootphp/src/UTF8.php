@@ -2,6 +2,8 @@
 
 namespace Bootphp;
 
+use Bootphp\Filesystem;
+
 /**
  * A port of [phputf8](http://phputf8.sourceforge.net/) to a unified set
  * of files. Provides multi-byte aware replacement string functions.
@@ -139,7 +141,7 @@ class UTF8
     public static function transliterate_to_ascii($str, $case = 0)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -164,7 +166,7 @@ class UTF8
             return mb_strlen($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -193,7 +195,7 @@ class UTF8
             return mb_strpos($str, $search, $offset, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -222,7 +224,7 @@ class UTF8
             return mb_strrpos($str, $search, $offset, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -250,7 +252,7 @@ class UTF8
             return ($length === null) ? mb_substr($str, $offset, mb_strlen($str), 'utf-8') : mb_substr($str, $offset, $length, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -274,7 +276,7 @@ class UTF8
     public static function substr_replace($str, $replacement, $offset, $length = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -300,7 +302,7 @@ class UTF8
             return mb_strtolower($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -324,7 +326,7 @@ class UTF8
             return mb_strtoupper($str, 'utf-8');
 
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -346,7 +348,7 @@ class UTF8
     public static function ucfirst($str)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -368,7 +370,7 @@ class UTF8
     public static function ucwords($str)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -393,7 +395,7 @@ class UTF8
     public static function strcasecmp($str1, $str2)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -421,7 +423,7 @@ class UTF8
     public static function str_ireplace($search, $replace, $str, & $count = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -446,7 +448,7 @@ class UTF8
     public static function stristr($str, $search)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -471,7 +473,7 @@ class UTF8
     public static function strspn($str, $mask, $offset = null, $length = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -496,7 +498,7 @@ class UTF8
     public static function strcspn($str, $mask, $offset = null, $length = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -521,7 +523,7 @@ class UTF8
     public static function str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -544,7 +546,7 @@ class UTF8
     public static function str_split($str, $split_length = 1)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -565,7 +567,7 @@ class UTF8
     public static function strrev($str)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -588,7 +590,7 @@ class UTF8
     public static function trim($str, $charlist = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -611,7 +613,7 @@ class UTF8
     public static function ltrim($str, $charlist = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -634,7 +636,7 @@ class UTF8
     public static function rtrim($str, $charlist = null)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -656,7 +658,7 @@ class UTF8
     public static function ord($chr)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -685,7 +687,7 @@ class UTF8
     public static function to_unicode($str)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;
@@ -714,7 +716,7 @@ class UTF8
     public static function from_unicode($arr)
     {
         if (!isset(UTF8::$called[__FUNCTION__])) {
-            require Core::find_file('utf8', __FUNCTION__);
+            require Filesystem::findFile('utf8', __FUNCTION__);
 
             // Function has been called
             UTF8::$called[__FUNCTION__] = true;

@@ -1,5 +1,8 @@
 <?php
 
+namespace Bootphp\tests\bootphp;
+
+use Bootphp\Filesystem;
 
 /**
  * Description of RouteTest
@@ -13,7 +16,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-include Core::find_file('tests', 'test_data/callback_routes');
+include Filesystem::findFile('tests', 'test_data/callback_routes');
 class Bootphp_RouteTest extends Unittest_TestCase
 {
     /**

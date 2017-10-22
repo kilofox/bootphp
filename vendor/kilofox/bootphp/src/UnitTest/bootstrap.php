@@ -26,11 +26,11 @@ $system = 'system';
 /**
  * Set the path to the document root
  *
- * This assumes that this file is stored 2 levels below the ROOT_PATH, if you move
+ * This assumes that this file is stored 2 levels below the PUB_PATH, if you move
  * this bootstrap file somewhere else then you'll need to modify this value to
  * compensate.
  */
-define('ROOT_PATH', realpath(dirname(__FILE__) . '/../../') . DIRECTORY_SEPARATOR);
+define('PUB_PATH', realpath(dirname(__FILE__) . '/../../') . DIRECTORY_SEPARATOR);
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
@@ -54,18 +54,18 @@ error_reporting(E_ALL | E_STRICT);
  * @link http://kilofox.net/guide/using.configuration
  */
 // Make the application relative to the docroot
-if (!is_dir($application) and is_dir(ROOT_PATH . $application)) {
-    $application = ROOT_PATH . $application;
+if (!is_dir($application) and is_dir(PUB_PATH . $application)) {
+    $application = PUB_PATH . $application;
 }
 
 // Make the modules relative to the docroot
-if (!is_dir($modules) and is_dir(ROOT_PATH . $modules)) {
-    $modules = ROOT_PATH . $modules;
+if (!is_dir($modules) and is_dir(PUB_PATH . $modules)) {
+    $modules = PUB_PATH . $modules;
 }
 
 // Make the system relative to the docroot
-if (!is_dir($system) and is_dir(ROOT_PATH . $system)) {
-    $system = ROOT_PATH . $system;
+if (!is_dir($system) and is_dir(PUB_PATH . $system)) {
+    $system = PUB_PATH . $system;
 }
 
 // Define the absolute paths for configured directories

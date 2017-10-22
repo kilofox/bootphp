@@ -3,6 +3,7 @@
 namespace Bootphp\Http;
 
 use Bootphp\Http\HttpException;
+use Bootphp\Http\Header;
 use Bootphp\BootphpException;
 
 /**
@@ -36,9 +37,9 @@ abstract class Http
         $e = HttpException::factory($code);
 
         if (!$e instanceof HttpException_Redirect)
-            throw new BootphpException('Invalid redirect code \':code\'', array(
+            throw new BootphpException('Invalid redirect code \':code\'', [
             ':code' => $code
-            ));
+            ]);
 
         throw $e->location($uri);
     }
@@ -85,7 +86,7 @@ abstract class Http
      * Parses a HTTP header string into an associative array
      *
      * @param   string   $header_string  Header string to parse
-     * @return  HTTP_Header
+     * @return  Header
      */
     public static function parse_header_string($header_string)
     {
@@ -95,7 +96,7 @@ abstract class Http
             $headers = version_compare(phpversion('http'), '2.0.0', '>=') ?
                 \http\Header::parse($header_string) :
                 http_parse_headers($header_string);
-            return new HTTP_Header($headers);
+            return new Header($headers);
         }
 
         // Otherwise we use the slower PHP parsing
@@ -119,17 +120,17 @@ abstract class Http
                     }
                     // Otherwise create a new array with the entries
                     else {
-                        $headers[$matches[1][$key]] = array(
+                        $headers[$matches[1][$key]] = [
                             $headers[$matches[1][$key]],
                             $matches[2][$key],
-                        );
+                        ];
                     }
                 }
             }
         }
 
         // Return the headers
-        return new HTTP_Header($headers);
+        return new Header($headers);
     }
 
     /**
@@ -140,14 +141,14 @@ abstract class Http
      *      // Get http headers into the request
      *      $request->headers = \Bootphp\Http\Http::request_headers();
      *
-     * @return  HTTP_Header
+     * @return  Header
      */
     public static function request_headers()
     {
         // If running on apache server
         if (function_exists('apache_request_headers')) {
             // Return the much faster method
-            return new HTTP_Header(apache_request_headers());
+            return new Header(apache_request_headers());
         }
         // If the PECL HTTP tools are installed
         elseif (extension_loaded('http')) {
@@ -155,7 +156,7 @@ abstract class Http
             $headers = version_compare(phpversion('http'), '2.0.0', '>=') ?
                 \http\Env::getRequestHeader() :
                 http_get_request_headers();
-            return new HTTP_Header($headers);
+            return new Header($headers);
         }
 
         // Setup the output
@@ -181,7 +182,7 @@ abstract class Http
             $headers[str_replace('_', '-', substr($key, 5))] = $value;
         }
 
-        return new HTTP_Header($headers);
+        return new Header($headers);
     }
 
     /**

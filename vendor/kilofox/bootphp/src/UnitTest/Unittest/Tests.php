@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\UnitTest\Unittest;
+
+use Bootphp\Filesystem;
+
 /**
  * PHPUnit testsuite for bootphp application
  *
@@ -21,7 +25,7 @@ class Bootphp_Unittest_Tests
     {
         $file = str_replace('_', '/', $class);
 
-        if ($file = Core::find_file('tests', $file)) {
+        if ($file = Filesystem::findFile('tests', $file)) {
             require_once $file;
         }
     }
@@ -209,7 +213,7 @@ class Bootphp_Unittest_Tests
             } else {
                 if (!isset(Unittest_tests::$cache[$file])) {
                     $relative_path = substr($file, strrpos($file, 'classes' . DIRECTORY_SEPARATOR) + 8, -4);
-                    $cascading_file = Core::find_file('classes', $relative_path);
+                    $cascading_file = Filesystem::findFile('classes', $relative_path);
 
                     // The theory is that if this file is the highest one in the cascading filesystem
                     // then it's safe to whitelist

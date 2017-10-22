@@ -69,7 +69,7 @@ class File
     public static function mime_by_ext($extension)
     {
         // Load all of the mime types
-        $mimes = Core::$config->load('mimes');
+        $mimes = Core::$config->load('mimes');print_r($mimes);
 
         return isset($mimes[$extension]) ? $mimes[$extension][0] : false;
     }

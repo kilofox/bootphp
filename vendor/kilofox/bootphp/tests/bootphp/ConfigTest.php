@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\Tests;
+
+use Bootphp\Config\Config;
+
 /**
  * Tests the Config lib that's shipped with bootphp
  *

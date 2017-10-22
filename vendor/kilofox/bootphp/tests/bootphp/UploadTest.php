@@ -1,5 +1,9 @@
 <?php
 
+namespace Bootphp\tests\bootphp;
+
+use Bootphp\Filesystem;
+
 /**
  * Tests Bootphp upload class
  *
@@ -43,8 +47,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                             'error' => UPLOAD_ERR_OK,
                             'name' => 'Unit_Test File',
                             'type' => 'image/png',
-                            'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                            'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                            'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                            'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                         )
                     )
                 ),
@@ -58,8 +62,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                             'error' => UPLOAD_ERR_OK,
                             'name' => 'Unit_Test File',
                             'type' => 'image/png',
-                            'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                            'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                            'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                            'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                         )
                     )
                 ),
@@ -101,8 +105,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             )
         ));
@@ -125,8 +129,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             ),
             array(
@@ -134,8 +138,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                 array(
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             ),
             array(
@@ -143,8 +147,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                 array(
                     'error' => UPLOAD_ERR_OK,
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             ),
             array(
@@ -152,17 +156,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                 array(
                     'name' => 'Unit_Test File',
                     'error' => UPLOAD_ERR_OK,
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
-                )
-            ),
-            array(
-                false,
-                array(
-                    'error' => UPLOAD_ERR_OK,
-                    'name' => 'Unit_Test File',
-                    'type' => 'image/png',
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             ),
             array(
@@ -171,7 +166,16 @@ class Bootphp_UploadTest extends Unittest_TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'Unit_Test File',
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
+                )
+            ),
+            array(
+                false,
+                array(
+                    'error' => UPLOAD_ERR_OK,
+                    'name' => 'Unit_Test File',
+                    'type' => 'image/png',
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
                 )
             ),
         );
@@ -209,8 +213,8 @@ class Bootphp_UploadTest extends Unittest_TestCase
                     'error' => UPLOAD_ERR_OK,
                     'name' => 'github.png',
                     'type' => 'image/png',
-                    'tmp_name' => Core::find_file('tests', 'test_data/github', 'png'),
-                    'size' => filesize(Core::find_file('tests', 'test_data/github', 'png')),
+                    'tmp_name' => Filesystem::findFile('tests', 'test_data/github', 'png'),
+                    'size' => filesize(Filesystem::findFile('tests', 'test_data/github', 'png')),
                 )
             )
         ));
