@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Doc\Controller;
+namespace App\Controller\Doc;
 
 use Bootphp\Controller\Template;
 use Bootphp\Route;
 use Bootphp\URL;
 use Michelf\Markdown;
-use App\Doc\Kodoc\Kodoc_Markdown;
+use App\Doc\Kodoc_Markdown;
 use Bootphp\Core;
 use Bootphp\View;
 use Bootphp\Filesystem;
@@ -19,7 +19,7 @@ use Bootphp\File;
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class IndexController extends Template
+class DocController extends Template
 {
     public $template = 'doc/template';
     // Routes
@@ -37,15 +37,17 @@ class IndexController extends Template
         } else {
             // Grab the necessary routes
             $this->media = Route::get('doc/media');
-            $this->guide = Route::get('doc/guide');
+            $this->guide = Route::get('doc');
 
             // Set the base URL for links and images
             Kodoc_Markdown::$base_url = URL::site($this->guide->uri()) . '/';
             Kodoc_Markdown::$image_url = URL::site($this->media->uri()) . '/';
         }
 
+        $config = Core::$config->load('userguide');
+
         // Default show_comments to config value
-        $this->template->show_comments = Core::$config->load('userguide')->get('show_comments');
+        $this->template->show_comments = $config->get('show_comments');
     }
 
     // List all modules that have userguides
@@ -70,8 +72,10 @@ class IndexController extends Template
         // Don't show disqus on error pages
         $this->template->show_comments = false;
 
+        $config = Core::$config->load('userguide')->get('modules');
+
         // If we are in a module and that module has a menu, show that
-        if ($module = $this->request->param('module') and $menu = $this->file($module . '/menu') and Core::$config->load('userguide.modules.' . $module . '.enabled')) {
+        if ($module = $this->request->param('module') and $menu = $this->file($module . '/menu') and $config['userguide']['enabled']) {
             // Namespace the markdown parser
             Kodoc_Markdown::$base_url = URL::site($this->guide->uri()) . '/' . $module . '/';
             Kodoc_Markdown::$image_url = URL::site($this->media->uri()) . '/' . $module . '/';
@@ -79,7 +83,7 @@ class IndexController extends Template
             $this->template->menu = Kodoc_Markdown::markdown($this->_get_all_menu_markdown());
             $this->template->breadcrumb = [
                 $this->guide->uri() => 'User Guide',
-                $this->guide->uri(['module' => $module]) => Core::$config->load('userguide.modules.' . $module . '.name'),
+                $this->guide->uri(['module' => $module]) => $config['userguide']['name'],
                 'Error'
             ];
         }
@@ -101,7 +105,7 @@ class IndexController extends Template
         }
     }
 
-    public function docAction()
+    public function docsAction()
     {
         $module = $this->request->param('module');
         $page = $this->request->param('page');
@@ -111,11 +115,13 @@ class IndexController extends Template
 
         // If no module provided in the url, show the user guide index page, which lists the modules.
         if (!$module) {
-            return $this->index();
+            //return $this->indexAction();
         }
 
+        $config = Core::$config->load('userguide')->get('modules');
+
         // If this module's userguide pages are disabled, show the error page
-        if (!Core::$config->load('userguide.modules.' . $module . '.enabled')) {
+        if (!$config['userguide']['enabled']) {
             return $this->error('That module doesn\'t exist, or has userguide pages disabled.');
         }
 
@@ -130,19 +136,15 @@ class IndexController extends Template
         }
 
         // Find the markdown file for this page
-        $file = $this->file($module . '/' . $page);
+        $file = $this->file($page);
 
         // If it's not found, show the error page
         if (!$file) {
             return $this->error('Userguide page not found');
         }
 
-        // Namespace the markdown parser
-        Kodoc_Markdown::$base_url = URL::site($this->guide->uri()) . '/' . $module . '/';
-        Kodoc_Markdown::$image_url = URL::site($this->media->uri()) . '/' . $module . '/';
-
         // Set the page title
-        $this->template->title = ($page == 'index') ? Core::$config->load('userguide.modules.' . $module . '.name') : $this->title($page);
+        $this->template->title = $page === 'index' ? $config['userguide']['name'] : $this->title($page);
 
         // Parse the page contents into the template
         Kodoc_Markdown::$show_toc = true;
@@ -152,77 +154,22 @@ class IndexController extends Template
         // Attach this module's menu to the template
         $this->template->menu = Kodoc_Markdown::markdown($this->_get_all_menu_markdown());
 
-        // Bind the breadcrumb
-        $this->template->bind('breadcrumb', $breadcrumb);
-
         // Bind the copyright
-        $this->template->copyright = Core::$config->load('userguide.modules.' . $module . '.copyright');
+        $this->template->copyright = $config['userguide']['copyright'];
 
         // Add the breadcrumb trail
         $breadcrumb = [];
-        $breadcrumb[$this->guide->uri()] = 'User Guide';
-        $breadcrumb[$this->guide->uri(['module' => $module])] = Core::$config->load('userguide.modules.' . $module . '.name');
+        $breadcrumb[$this->guide->uri()] = 'Documentation';
+        $breadcrumb[$this->guide->uri(['module' => $module])] = $config['userguide']['name'];
 
         // TODO try and get parent category names (from menu).  Regex magic or javascript dom stuff perhaps?
         // Only add the current page title to breadcrumbs if it isn't the index, otherwise we get repeats.
         if ($page != 'index') {
             $breadcrumb[] = $this->template->title;
         }
-    }
-
-    public function apiAction()
-    {
-        // Enable the missing class autoloader.  If a class cannot be found a
-        // fake class will be created that extends Kodoc_Missing
-        spl_autoload_register(['Kodoc_Missing', 'create_class']);
-
-        // Get the class from the request
-        $class = $this->request->param('class');
-
-        // If no class was passed to the url, display the API index page
-        if (!$class) {
-            $this->template->title = 'Table of Contents';
-
-            $this->template->content = View::factory('doc/api/toc')
-                ->set('classes', Kodoc::class_methods())
-                ->set('route', $this->request->route());
-        } else {
-            // Create the Kodoc_Class version of this class.
-            $_class = Kodoc_Class::factory($class);
-
-            // If the class requested and the actual class name are different
-            // (different case, orm vs ORM, auth vs Auth) redirect
-            if ($_class->class->name != $class) {
-                $this->redirect($this->request->route()->uri(['class' => $_class->class->name]));
-            }
-
-            // If this classes immediate parent is Kodoc_Missing, then it should 404
-            if ($_class->class->getParentClass() and $_class->class->getParentClass()->name == 'Kodoc_Missing')
-                return $this->error('That class was not found. Check your url and make sure that the module with that class is enabled.');
-
-            // If this classes package has been disabled via the config, 404
-            if (!Kodoc::show_class($_class))
-                return $this->error('That class is in package that is hidden.  Check the <code>api_packages</code> config setting.');
-
-            // Everything is fine, display the class.
-            $this->template->title = $class;
-
-            $this->template->content = View::factory('doc/api/class')
-                ->set('doc', $_class)
-                ->set('route', $this->request->route());
-        }
-
-        // Attach the menu to the template
-        $this->template->menu = Kodoc::menu();
 
         // Bind the breadcrumb
-        $this->template->bind('breadcrumb', $breadcrumb);
-
-        // Add the breadcrumb
-        $breadcrumb = [];
-        $breadcrumb[$this->guide->uri(['page' => null])] = 'User Guide';
-        $breadcrumb[$this->request->route()->uri()] = 'API Browser';
-        $breadcrumb[] = $this->template->title;
+        $this->template->set('breadcrumb', $breadcrumb);
     }
 
     public function mediaAction()
@@ -306,7 +253,7 @@ class IndexController extends Template
             and ( ($info['extension'] === 'md') or ( $info['extension'] === 'markdown'))) {
             $page = $info['dirname'] . DIRECTORY_SEPARATOR . $info['filename'];
         }
-        return Filesystem::findFile('guide', $page, 'md');
+        return Filesystem::findFile('docs', $page, 'md');
     }
 
     public function section($page)
@@ -339,7 +286,7 @@ class IndexController extends Template
 
         if (empty($markdown)) {
             // Get menu items
-            $file = $this->file($this->request->param('module') . '/menu');
+            $file = $this->file('menu');
 
             if ($file and $text = file_get_contents($file)) {
                 // Add spans around non-link categories. This is a terrible hack.
@@ -359,7 +306,9 @@ class IndexController extends Template
      */
     protected function _modules()
     {
-        $modules = array_reverse(Core::$config->load('userguide')->get('modules', []));
+        $config = Core::$config->load('userguide')->get('modules', []);
+
+        $modules = array_reverse($config);
 
         if (isset($modules['bootphp'])) {
             $bootphp = $modules['bootphp'];
@@ -369,7 +318,7 @@ class IndexController extends Template
 
         // Remove modules that have been disabled via config
         foreach ($modules as $key => $value) {
-            if (!Core::$config->load('userguide.modules.' . $key . '.enabled')) {
+            if (!$config['userguide']['enabled']) {
                 unset($modules[$key]);
             }
         }

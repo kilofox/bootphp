@@ -30,6 +30,11 @@ class HttpException extends BootphpException
     protected $_request;
 
     /**
+     * @var  Response   Response Object
+     */
+    protected $_response;
+
+    /**
      * Creates a new translated exception.
      *
      *     throw new BootphpException('Something went wrong, :user', array(':user' => $user));
@@ -43,6 +48,9 @@ class HttpException extends BootphpException
         $this->_code = $code;
 
         parent::__construct($message, $variables, $this->_code);
+
+        // Prepare our response object and set the correct status code.
+        $this->_response = \Bootphp\Response::factory()->status($this->_code);
     }
 
     /**
@@ -70,6 +78,24 @@ class HttpException extends BootphpException
     public function get_response()
     {
         return BootphpException::response($this);
+    }
+
+    /**
+     * Gets and sets headers to the [Response].
+     *
+     * @see     [Response::headers]
+     * @param   mixed   $key
+     * @param   string  $value
+     * @return  mixed
+     */
+    public function headers($key = null, $value = null)
+    {
+        $result = $this->_response->headers($key, $value);
+
+        if (!$result instanceof Response)
+            return $result;
+
+        return $this;
     }
 
 }

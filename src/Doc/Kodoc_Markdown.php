@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Doc\Kodoc;
+namespace App\Doc;
 
 use Michelf\MarkdownExtra;
 use Bootphp\Filesystem;
+use Bootphp\URL;
+use Bootphp\Route;
+use Bootphp\Request\Request;
+use Bootphp\View;
 
 /**
  * Custom Markdown parser for Bootphp documentation.
@@ -70,9 +74,6 @@ class Kodoc_Markdown extends MarkdownExtra
         // doLink is 20, add base url just before
         $this->span_gamut['doBaseURL'] = 19;
 
-        // Add API links
-        $this->span_gamut['doAPI'] = 90;
-
         // Add note spans last
         $this->span_gamut['doNotes'] = 100;
 
@@ -95,7 +96,7 @@ class Kodoc_Markdown extends MarkdownExtra
      * @param   array   Matches from regex call
      * @return  string  Generated html
      */
-    function _doHeaders_callback_setext($matches)
+    public function _doHeaders_callback_setext($matches)
     {
         if ($matches[3] == '-' and preg_match('{^- }', $matches[1]))
             return $matches[0];
@@ -125,12 +126,7 @@ class Kodoc_Markdown extends MarkdownExtra
     function _doHeaders_callback_atx($matches)
     {
         $level = strlen($matches[1]);
-        $attr = $this->_doHeaders_attr($id = & $matches[3]);
-
-        // Only auto-generate id if one doesn't exist
-        if (empty($attr)) {
-            $attr = ' id="' . $this->make_heading_id($matches[2]) . '"';
-        }
+        $attr = $this->doExtraAttributes('h' . $level, 'id=' . $this->make_heading_id($matches[2]));
 
         // Add this header to the page toc
         $this->_add_to_toc($level, $matches[2], $this->make_heading_id(empty($matches[3]) ? $matches[2] : $matches[3]));
@@ -148,7 +144,8 @@ class Kodoc_Markdown extends MarkdownExtra
      */
     function make_heading_id($heading)
     {
-        $id = url::title($heading, '-', true);
+        //$id = URL::title($heading, '-', true);
+        $id = URL::title($heading, '-', false); // Deprecated
 
         if (isset($this->_heading_ids[$id])) {
             $id .= '-';
@@ -222,19 +219,6 @@ class Kodoc_Markdown extends MarkdownExtra
     }
 
     /**
-     * Parses links to the API browser.
-     *
-     *     [Class_Name], [Class::method] or [Class::$property]
-     *
-     * @param   string  Span text
-     * @return  string
-     */
-    public function doAPI($text)
-    {
-        return preg_replace_callback('/\[' . Kodoc::$regex_class_member . '\]/i', 'Kodoc::link_class_member', $text);
-    }
-
-    /**
      * Wrap notes in the applicable markup. Notes can contain single newlines.
      *
      *     [!!] Remember the milk!
@@ -262,11 +246,10 @@ class Kodoc_Markdown extends MarkdownExtra
     public function doTOC($text)
     {
         // Only add the toc do userguide pages, not api since they already have one
-        if (self::$show_toc and Route::name(Request::current()->route()) == "docs/guide") {
-            $toc = View::factory('userguide/page-toc')
+        if (self::$show_toc and Route::name(Request::current()->route()) == 'doc') {
+            $toc = View::factory('doc/page-toc')
                 ->set('array', self::$_toc)
-                ->render()
-            ;
+                ->render();
 
             if (($offset = strpos($text, '<p>')) !== false) {
                 // Insert the page TOC just before the first <p>, which every

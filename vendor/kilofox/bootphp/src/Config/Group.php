@@ -61,16 +61,6 @@ class Group extends \ArrayObject
     }
 
     /**
-     * Alias for getArrayCopy()
-     *
-     * @return array Array copy of the group's config
-     */
-    public function asArray()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
      * Returns the config group's name
      *
      * @return string The group name

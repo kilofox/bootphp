@@ -80,9 +80,9 @@ class Filesystem
             $found = [];
 
             foreach ($paths as $dir) {
-                if (is_file($dir . $path)) {
+                if (is_file($dir . DIRECTORY_SEPARATOR . $path)) {
                     // This path has a file, add it to the list
-                    $found[] = $dir . $path;
+                    $found[] = $dir . DIRECTORY_SEPARATOR . $path;
                 }
             }
         } else {

@@ -117,46 +117,27 @@ Bootphp\Cookie::$salt = 'null';
  */
 
 // Static file serving (CSS, JS, images)
-Bootphp\Route::set('doc/media', 'doc/media(/<file>)', array('file' => '.+'))
-    ->defaults(array(
+Bootphp\Route::set('doc/media', 'doc/media(/<file>)', ['file' => '.+'])
+    ->defaults([
         'directory' => 'doc',
-        'controller' => 'index',
+        'controller' => 'doc',
         'action' => 'media',
         'file' => null,
-    ));
+    ]);
 
-// API Browser, if enabled
-if (Bootphp\Core::$config->load('userguide.api_browser') === true) {
-    Bootphp\Route::set('doc/api', 'guide-api(/<class>)', array('class' => '[a-zA-Z0-9_]+'))
-        ->defaults(array(
-            'controller' => 'Userguide',
-            'action' => 'api',
-            'class' => null,
-    ));
-}
-
-Bootphp\Route::set('doc', '(<directory>(/<controller>(/<id>)(/<action>)))')
-    ->defaults(array(
+// User guide pages
+Bootphp\Route::set('doc', '<directory>(/<page>)', ['page' => '.+'])
+    ->defaults([
         'directory' => 'doc',
-        'controller' => 'index',
-        'action' => 'index',
-    ));
-
-// User guide pages, in modules
-Bootphp\Route::set('doc/guide', 'guide(/<module>(/<page>))', array(
-        'page' => '.+',
-    ))
-    ->defaults(array(
-        'controller' => 'Userguide',
+        'controller' => 'doc',
         'action' => 'docs',
-        'module' => '',
-    ));
+    ]);
 
 Bootphp\Route::set('default', '(<controller>(/<action>(/<id>)))')
-    ->defaults(array(
+    ->defaults([
         'controller' => 'welcome',
         'action' => 'index',
-    ));
+    ]);
 
 if (PHP_SAPI == 'cli') {
     // Try and load minion

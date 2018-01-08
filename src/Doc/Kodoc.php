@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Doc;
+
+use Bootphp\HTML;
+use Bootphp\Route;
+
 /**
  * Documentation generator.
  *
@@ -7,7 +12,7 @@
  * @copyright   (C) 2013-2017 Kilofox Studio
  * @license     http://kilofox.net/bootphp/license
  */
-class Bootphp_Kodoc
+class Kodoc
 {
     /**
      * @var string  PCRE fragment for matching 'Class', 'Class::method', 'Class::method()' or 'Class::$property'

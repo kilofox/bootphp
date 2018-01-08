@@ -89,7 +89,7 @@ class Config
     public function load($group)
     {
         if (!count($this->_sources)) {
-            throw new BootphpException('No configuration sources attached');
+            //throw new BootphpException('No configuration sources attached');
         }
 
         if (empty($group)) {
@@ -153,7 +153,7 @@ class Config
     public function _write_config($group, $key, $value)
     {
         foreach ($this->_sources as $source) {
-            if (!($source instanceof Bootphp_Config_Writer)) {
+            if (!($source instanceof \Bootphp\Config\Writer)) {
                 continue;
             }
 
